@@ -1,0 +1,3183 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Z Script +",
+   Icon = 0,
+   LoadingTitle = "Z Script +",
+   LoadingSubtitle = "by Z",
+   Theme = { -- 💜 Custom Purple Theme
+      TextColor = Color3.fromRGB(240, 240, 255),
+
+      Background = Color3.fromRGB(20, 15, 30),
+      Topbar = Color3.fromRGB(34, 25, 50),
+      Shadow = Color3.fromRGB(15, 10, 25),
+
+      NotificationBackground = Color3.fromRGB(30, 20, 40),
+      NotificationActionsBackground = Color3.fromRGB(230, 230, 230),
+
+      TabBackground = Color3.fromRGB(60, 40, 80),
+      TabStroke = Color3.fromRGB(85, 70, 120),
+      TabBackgroundSelected = Color3.fromRGB(180, 150, 230),
+      TabTextColor = Color3.fromRGB(240, 240, 255),
+      SelectedTabTextColor = Color3.fromRGB(40, 30, 50),
+
+      ElementBackground = Color3.fromRGB(45, 35, 65),
+      ElementBackgroundHover = Color3.fromRGB(55, 45, 75),
+      SecondaryElementBackground = Color3.fromRGB(35, 25, 50),
+      ElementStroke = Color3.fromRGB(70, 50, 100),
+      SecondaryElementStroke = Color3.fromRGB(50, 40, 80),
+              
+      SliderBackground = Color3.fromRGB(150, 100, 200),
+      SliderProgress = Color3.fromRGB(180, 120, 255),
+      SliderStroke = Color3.fromRGB(200, 150, 255),
+
+      ToggleBackground = Color3.fromRGB(40, 30, 50),
+      ToggleEnabled = Color3.fromRGB(170, 100, 255),
+      ToggleDisabled = Color3.fromRGB(100, 100, 100),
+      ToggleEnabledStroke = Color3.fromRGB(190, 130, 255),
+      ToggleDisabledStroke = Color3.fromRGB(125, 125, 125),
+      ToggleEnabledOuterStroke = Color3.fromRGB(120, 80, 160),
+      ToggleDisabledOuterStroke = Color3.fromRGB(65, 65, 65),
+
+      DropdownSelected = Color3.fromRGB(60, 50, 80),
+      DropdownUnselected = Color3.fromRGB(40, 30, 60),
+
+      InputBackground = Color3.fromRGB(35, 25, 55),
+      InputStroke = Color3.fromRGB(65, 50, 90),
+      PlaceholderColor = Color3.fromRGB(190, 180, 220)
+   },
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false,
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "Big Hub"
+   },
+
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink",
+      RememberJoins = true
+   },
+
+   KeySystem = false,
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided",
+      FileName = "Key",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = {"Hello"}
+   }
+})
+
+local Tab = Window:CreateTab("Keystone💔", "zap")
+local Section = Tab:CreateSection("Section Example")
+Section:Set("Keystone")
+
+-- Rayfield Button Setup
+local Button = Tab:CreateButton({
+    Name = "Auto Pum + Teleport + Serverhop",  -- Button name
+    Callback = function()
+        -- ===== Main Script =====
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local root = character:WaitForChild("HumanoidRootPart")
+        local Http = game:GetService("HttpService")
+        local TPS = game:GetService("TeleportService")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+        -- Fire the RemoteEvent
+        local ohString1 = "upd"
+        local ohString2 = "j\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+        local successRemote, err = pcall(function()
+            ReplicatedStorage["307D0912-4609-4190-B07C-739143B666D3"]:FireServer(ohString1, ohString2)
+        end)
+        if not successRemote then
+            warn("Failed to fire remote:", err)
+        end
+
+        -- Activate "pum" prompts
+        local function activatePrompt(prompt)
+            if prompt and prompt:IsA("ProximityPrompt") then
+                local part = prompt.Parent:IsA("BasePart") and prompt.Parent or prompt.Parent:FindFirstChildWhichIsA("BasePart")
+                if part then
+                    root.CFrame = part.CFrame + Vector3.new(0, 3, 0)
+                    task.wait(0.3)
+                    pcall(function() fireproximityprompt(prompt) end)
+                end
+            end
+        end
+
+        for _, v in ipairs(workspace:GetDescendants()) do
+            if v:IsA("ProximityPrompt") and v.Name:lower() == "pum" then
+                activatePrompt(v)
+                task.wait(0.1)
+            end
+        end
+
+        print("✅ Finished activating all 'pum' prompts.")
+
+        -- Teleport to waypoint (full CFrame)
+        local targetCFrame = CFrame.new(
+            -167.146347, -492.700043, 149.442932,
+            -0.977956474, -4.67826986e-08, 0.208808899,
+            -4.24570281e-08, 1, 2.51980357e-08,
+            -0.208808899, 1.57771769e-08, -0.977956474
+        )
+        root.CFrame = targetCFrame
+        print("✅ Teleported to waypoint.")
+
+        -- Serverhop
+        local placeId = game.PlaceId
+        local jobId = game.JobId
+        local apiUrl = "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Desc&limit=100"
+
+        local function listServers(cursor)
+            local raw = game:HttpGet(apiUrl .. ((cursor and "&cursor=" .. cursor) or ""))
+            return Http:JSONDecode(raw)
+        end
+
+        local nextPage
+        repeat
+            local ok, servers = pcall(listServers, nextPage)
+            if not ok or not servers or not servers.data then
+                warn("Failed to list servers or invalid response; aborting serverhop.")
+                break
+            end
+
+            for _, v in next, servers.data do
+                if type(v.playing) == "number" and type(v.maxPlayers) == "number" and v.playing < v.maxPlayers and v.id ~= jobId then
+                    local success = pcall(TPS.TeleportToPlaceInstance, TPS, placeId, v.id, player)
+                    if success then
+                        print("🌍 Serverhopping to new server...")
+                        break
+                    end
+                end
+            end
+
+            nextPage = servers.nextPageCursor
+        until not nextPage
+    end
+})
+
+
+
+local Divider = Tab:CreateDivider()
+
+
+local colorCycleRunning = false
+local colorCycleThread
+
+local Toggle = Tab:CreateToggle({
+    Name = "Color Cycle",
+    CurrentValue = false,
+    Flag = "ColorCycleToggle",
+    Callback = function(Value)
+        colorCycleRunning = Value
+
+        if colorCycleRunning then
+            colorCycleThread = coroutine.create(function()
+                local colors = {
+                    Color3.new(1, 0, 0), Color3.new(0.8, 0.2, 0.2),
+                    Color3.new(1, 0.5, 0), Color3.new(1, 1, 0),
+                    Color3.new(0, 1, 0), Color3.new(0, 0, 1),
+                    Color3.new(0.5, 0, 0.5), Color3.new(0.5, 0.5, 0.5),
+                    Color3.new(1, 0, 1), Color3.new(0, 1, 1),
+                    Color3.new(1, 1, 1), Color3.new(0, 0, 0),
+                    Color3.new(1, 0.5, 0.5), Color3.new(1, 1, 0.5),
+                    Color3.new(0.5, 1, 0), Color3.new(0.5, 0.5, 1),
+                    Color3.new(0.7, 0, 0.7), Color3.new(0.2, 0.2, 0.5),
+                    Color3.new(0.2, 0.8, 0.2), Color3.new(1, 0, 0),
+                    Color3.new(0, 1, 0), Color3.new(0, 0, 1),
+                    Color3.new(1, 1, 0), Color3.new(0, 0, 0),
+                    Color3.new(1, 1, 1), Color3.new(1, 1, 0),
+                    Color3.new(1, 0.4, 0.7), Color3.new(0.5, 0, 1),
+                    Color3.new(1, 0.5, 0), Color3.new(0.5, 0.5, 0.5),
+                    Color3.new(0, 1, 1), Color3.new(0.6, 0.3, 0)
+                }
+
+                local remote = game:GetService("ReplicatedStorage"):WaitForChild("307D0912-4609-4190-B07C-739143B666D3")
+
+                while colorCycleRunning do
+                    for _, color in ipairs(colors) do
+                        if not colorCycleRunning then return end
+                        remote:FireServer("colo", color)
+                        task.wait(0.1)
+                    end
+                end
+            end)
+
+            coroutine.resume(colorCycleThread)
+        else
+            colorCycleRunning = false -- this will stop the loop naturally
+        end
+    end
+})
+
+
+local fontCycleRunning = false
+local fontCycleThread
+
+local Toggle = Tab:CreateToggle({
+   Name = "Font Cycle",
+   CurrentValue = false,
+   Flag = "FontCycleToggle",
+   Callback = function(Value)
+       fontCycleRunning = Value
+       if fontCycleRunning then
+           fontCycleThread = task.spawn(function()
+               local fonts = {
+                   Enum.Font.Garamond,
+                   Enum.Font.SourceSans,
+                   Enum.Font.Arial,
+                   Enum.Font.Bodoni,
+                   Enum.Font.Garamond,
+                   Enum.Font.SourceSansSemibold,
+                   Enum.Font.GothamMedium,
+                   Enum.Font.GothamBold,
+                   Enum.Font.GothamBlack,
+                   Enum.Font.AmaticSC,
+                   Enum.Font.Bangers,
+                   Enum.Font.DenkOne,
+                   Enum.Font.Fondamento,
+                   Enum.Font.FredokaOne,
+                   Enum.Font.GrenzeGotisch,
+                   Enum.Font.JosefinSans,
+                   Enum.Font.Kalam,
+                   Enum.Font.Merriweather,
+                   Enum.Font.Michroma,
+                   Enum.Font.Oswald,
+                   Enum.Font.PatrickHand,
+                   Enum.Font.PermanentMarker,
+                   Enum.Font.RobotoCondensed,
+                   Enum.Font.RobotoMono,
+                   Enum.Font.Sarpanch,
+                   Enum.Font.SpecialElite,
+                   Enum.Font.TitilliumWeb,
+                   Enum.Font.Ubuntu,
+                   Enum.Font.BuilderSans,
+                   Enum.Font.BuilderSansMedium,
+                   Enum.Font.BuilderSansBold,
+                   Enum.Font.BuilderSansExtraBold,
+                   Enum.Font.Arimo,
+                   Enum.Font.ArimoBold,
+               }
+
+               while fontCycleRunning do
+                   for _, font in ipairs(fonts) do
+                       if not fontCycleRunning then break end
+                       local args = { "font", font }
+                       game:GetService("ReplicatedStorage"):WaitForChild("307D0912-4609-4190-B07C-739143B666D3"):FireServer(unpack(args))
+                       task.wait(0.5)
+                   end
+               end
+           end)
+       else
+           if fontCycleThread then
+               task.cancel(fontCycleThread)
+           end
+       end
+   end,
+})
+
+
+local fireServerRunning = false
+
+local Toggle = Tab:CreateToggle({
+   Name = "Level Cycle",
+   CurrentValue = false,
+   Flag = "Toggle_FireServer",
+   Callback = function(Value)
+      fireServerRunning = Value
+
+      if fireServerRunning then
+         task.spawn(function()
+            local remote = game:GetService("ReplicatedStorage"):WaitForChild("8E966FA0-E6B9-4566-ADBA-DB9BC15D5C49", 9e9)
+            while fireServerRunning do
+               for i = 1, 3 do
+                  remote:FireServer(3)
+                  task.wait(0.1)
+               end
+               if math.random() < 0.2 then
+                  remote:FireServer(4)
+               end
+               task.wait(0.1)
+            end
+         end)
+      end
+   end,
+})
+
+local fireServerRunning2 = false
+local fireServerThread2
+
+local Toggle = Tab:CreateToggle({
+    Name = "AFK Cycle",
+    CurrentValue = false,
+    Flag = "FireServer1Toggle",
+    Callback = function(Value)
+        if Value then
+            fireServerRunning2 = true
+            fireServerThread2 = task.spawn(function()
+                local remote = game:GetService("ReplicatedStorage"):WaitForChild("8E966FA0-E6B9-4566-ADBA-DB9BC15D5C49", 9e9)
+                while fireServerRunning2 do
+                    for i = 1, 3 do
+                        remote:FireServer(1)
+                        task.wait(0.1)
+                    end
+                    task.wait(0.1)
+                end
+            end)
+        else
+            fireServerRunning2 = false
+        end
+    end,
+})
+
+local Divider = Tab:CreateDivider()
+----------------------------------------------------------------------------------------------------------------
+
+
+-- Rayfield Button Setup
+local Button = Tab:CreateButton({
+    Name = "Go to Crib",  -- Button name
+    Callback = function()
+        -- Function to teleport the player
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        if character and character.PrimaryPart then
+            character:SetPrimaryPartCFrame(CFrame.new(-139, -493, 133))
+        end
+    end,
+})
+
+-- Function to create the house (same as before, no change here)
+local function createPart(size, position, color)
+    local part = Instance.new("Part")
+    part.Size = size
+    part.Position = position
+    part.Anchored = true
+    part.BrickColor = BrickColor.new(color)
+    part.Parent = workspace
+    return part
+end
+
+local function createTransparentPart(size, position)
+    local part = createPart(size, position, "Institutional white")
+    part.Material = Enum.Material.SmoothPlastic
+    part.Transparency = 0.5
+    return part
+end
+
+local function createTeleporter(position, targetPosition)
+    local teleporter = createPart(Vector3.new(3, 10, 1), position, "White")
+    teleporter.Material = Enum.Material.Neon
+    teleporter.Touched:Connect(function(hit)
+        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+        if player then
+            hit.Parent:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+        end
+    end)
+end
+
+local function createTable(position)
+    local tableTop = createPart(Vector3.new(12, 0.5, 8), position, "Brown")
+    createPart(Vector3.new(0.5, 3, 0.5), position + Vector3.new(-5.5, -1.5, -3), "Brown")
+    createPart(Vector3.new(0.5, 3, 0.5), position + Vector3.new(5.5, -1.5, -3), "Brown")
+    createPart(Vector3.new(0.5, 3, 0.5), position + Vector3.new(-5.5, -1.5, 3), "Brown")
+    createPart(Vector3.new(0.5, 3, 0.5), position + Vector3.new(5.5, -1.5, 3), "Brown")
+end
+
+local function createChair(position)
+    local chairSeat = createPart(Vector3.new(2, 0.5, 2), position + Vector3.new(0, 0.5, 0), "Brown")
+    local backrest = createPart(Vector3.new(0.5, 2, 2), position + Vector3.new(0, 1.5, -1), "Brown")
+    chairSeat.Anchored = true
+    backrest.Anchored = true
+end
+
+local function createHouse()
+    local houseSize = Vector3.new(80, 20, 50)
+    local floorHeight = 1
+    local wallHeight = 20
+    local basePosition = Vector3.new(-168, -497, 150)
+
+    -- Create floor
+    createPart(Vector3.new(houseSize.X, floorHeight, houseSize.Z), basePosition, "Brown")
+
+    -- Create walls
+    local wallThickness = 1
+    createPart(Vector3.new(wallThickness, wallHeight, houseSize.Z), basePosition + Vector3.new(-houseSize.X/2, wallHeight/2, 0), "Brick")
+    createPart(Vector3.new(wallThickness, wallHeight, houseSize.Z), basePosition + Vector3.new(houseSize.X/2, wallHeight/2, 0), "Brick")
+    createPart(Vector3.new(houseSize.X, wallHeight, wallThickness), basePosition + Vector3.new(0, wallHeight/2, -houseSize.Z/2), "Brick")
+    createPart(Vector3.new(houseSize.X, wallHeight, wallThickness), basePosition + Vector3.new(0, wallHeight/2, houseSize.Z/2), "Brick")
+
+    -- Create door opening
+    local doorWidth = 3
+    local doorHeight = 7
+    local doorPosition = basePosition + Vector3.new(0, doorHeight / 2, houseSize.Z / 2 + 0.1)
+    createPart(Vector3.new(doorWidth, doorHeight, wallThickness), doorPosition, "Bright blue")
+
+    -- Create teleporters
+    createTeleporter(basePosition + Vector3.new(-30, 1, 0), Vector3.new(-323, 3, 160))
+    createTeleporter(Vector3.new(-317, 3, 160), Vector3.new(-204, -493, 133))
+
+    -- Create roof
+    createPart(Vector3.new(houseSize.X + 2 * wallThickness, wallThickness, houseSize.Z + 2 * wallThickness), basePosition + Vector3.new(0, wallHeight + wallThickness/2, 0), "Dark green")
+
+    -- Create transparent windows
+    local windowSize = Vector3.new(6, 6, wallThickness)
+    createTransparentPart(windowSize, basePosition + Vector3.new(-houseSize.X/2 + 1, wallHeight/2 + 2, houseSize.Z/2 + 0.1))
+    createTransparentPart(windowSize, basePosition + Vector3.new(houseSize.X/2 - 1, wallHeight/2 + 2, houseSize.Z/2 + 0.1))
+    createTransparentPart(windowSize, basePosition + Vector3.new(0, wallHeight/2 + 2, -houseSize.Z/2 + 0.1))
+
+    -- Create table
+    local tablePosition = basePosition + Vector3.new(0, 1, 0)
+    createTable(tablePosition)
+
+    -- Create chairs around the table
+    local chairOffset = 6
+    for i = 0, 7 do
+        local angle = (i * math.pi / 4)
+        local xOffset = chairOffset * math.cos(angle)
+        local zOffset = chairOffset * math.sin(angle)
+        createChair(tablePosition + Vector3.new(xOffset, 0, zOffset))
+    end
+
+    -- Create lights
+    local light = Instance.new("PointLight")
+    light.Brightness = 2
+    light.Range = 20
+    light.Parent = createPart(Vector3.new(1, 1, 1), basePosition + Vector3.new(0, wallHeight - 1, 0), "White")
+end
+
+createHouse()
+
+
+local Tab2 = Window:CreateTab("+", "zap")
+
+
+local Divider = Tab:CreateDivider()
+----------------------------------------------------------------------------------------------------------------
+
+local Toggle = Tab2:CreateToggle({
+   Name = "VC Bypass",
+   CurrentValue = false,
+   Flag = "VoiceChatToggle", -- A flag to identify this toggle's state
+   Callback = function(Value)
+       local VoiceChatService = cloneref(game:GetService("VoiceChatService"))
+
+       if Value then
+           -- Join the voice chat when toggle is on
+           VoiceChatService:joinVoice()
+       else
+           -- Leave the voice chat when toggle is off
+           -- You may want to add code for leaving the voice chat if needed
+       end
+
+       -- Listen for voice chat moderation events
+       if typeof(onVoiceModerated) ~= "RBXScriptConnection" then
+           onVoiceModerated = cloneref(game:GetService("VoiceChatInternal")).LocalPlayerModerated:Connect(function()
+               task.wait(1)  -- Wait for a brief moment after moderation
+               VoiceChatService:joinVoice()  -- Rejoin the voice chat after moderation
+           end)
+       end
+   end,
+})
+
+
+local player = game.Players.LocalPlayer
+local toolOrbitEnabled = false  -- Variable to track if the tool orbit is enabled
+
+-- Function to activate tool orbit
+local function activateToolOrbit()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local backpack = player.Backpack
+
+    if character:FindFirstChildOfClass("Tool") then
+        for i, v in pairs(character:GetChildren()) do
+            if v:IsA("Tool") then
+                v.Parent = backpack
+            end
+        end
+        wait()
+    end
+
+    for i, v in pairs(backpack:GetChildren()) do
+        if v:IsA("Tool") then
+            spawn(function()
+                local tool = v
+                local Handle = tool:FindFirstChild("Handle")
+                while toolOrbitEnabled do
+                    if Handle then
+                        local offset = Vector3.new(0, 0, 0.7)  -- Orbit offset
+                        local currentGrip = tool.Grip
+                        local rotation = CFrame.Angles(0, math.rad(workspace.DistributedGameTime * 50), 0)
+                        local inverseOffset = CFrame.new(offset):Inverse()
+                        local newGrip = currentGrip * rotation * inverseOffset
+                        tool.Grip = newGrip
+                        tool.Parent = player.Backpack
+                        Handle.CanCollide = false
+                        tool.Parent = character
+                    end
+                    wait(0)
+                end
+            end)
+        end
+    end
+end
+
+-- Function to deactivate tool orbit
+local function deactivateToolOrbit()
+    toolOrbitEnabled = false
+end
+
+-- Create the Toggle button using the format you provided
+local Toggle = Tab2:CreateToggle({
+   Name = "Tool Orbit",  -- The name displayed on the toggle button
+   CurrentValue = toolOrbitEnabled,  -- Initial state of the toggle (true or false)
+   Flag = "ToolOrbitFlag",  -- Unique flag for saving the toggle state
+   Callback = function(Value)
+      
+       if Value then
+           toolOrbitEnabled = true
+           activateToolOrbit()  -- Activate tool orbit when toggle is enabled
+       else
+           toolOrbitEnabled = false
+           deactivateToolOrbit()  -- Deactivate tool orbit when toggle is disabled
+       end
+   end,
+})
+
+
+player.CharacterAdded:Connect(function()
+    if toolOrbitEnabled then
+        activateToolOrbit()  -- Reactivate tool orbit on character reset if the toggle was enabled
+    end
+end)
+
+
+
+
+local frames = {}
+local flashbackEnabled = false
+local flashbackLength = 60 -- seconds
+local flashbackSpeed = 1 -- frames to skip
+local RS = game:GetService("RunService")
+local LP = game.Players.LocalPlayer
+
+-- Function to get the character of the player
+local function getCharacter()
+    return LP.Character or LP.CharacterAdded:Wait()
+end
+
+-- Function to get the HumanoidRootPart of the character
+local function getHRP(character)
+    return character:FindFirstChild("HumanoidRootPart") or character.PrimaryPart
+end
+
+-- Function to advance the movement, saving frames
+local function advanceMovement(char, hrp, hum)
+    if #frames > flashbackLength * 500 then
+        table.remove(frames, 1)
+    end
+    table.insert(frames, {
+        hrp.CFrame,
+        hrp.Velocity,
+        hum:GetState(),
+        hum.PlatformStand,
+        char:FindFirstChildOfClass("Tool")
+    })
+end
+
+-- Function to revert the movement, applying saved frames
+local function revertMovement(char, hrp, hum)
+    local num = #frames
+    if num == 0 then
+        return
+    end
+
+    for i = 1, flashbackSpeed do
+        if num <= 0 then break end
+        num = num - 1
+    end
+
+    local lastFrame = frames[num]
+    table.remove(frames, num)
+
+    hrp.CFrame = lastFrame[1]
+    hrp.Velocity = -lastFrame[2]
+    hum:ChangeState(lastFrame[3])
+    hum.PlatformStand = lastFrame[4]
+
+    local currentTool = char:FindFirstChildOfClass("Tool")
+    if lastFrame[5] then
+        if not currentTool then
+            hum:EquipTool(lastFrame[5])
+        end
+    else
+        hum:UnequipTools()
+    end
+end
+
+-- Create Toggle for Flashback
+local Toggle = Tab2:CreateToggle({
+    Name = "Reverse",
+    CurrentValue = flashbackEnabled,
+    Flag = "ReverseMovement", -- Flag to save configuration
+    Callback = function(Value)
+        -- Toggle the flashbackEnabled state
+        flashbackEnabled = Value
+
+        -- Change text and color (this part is for visual feedback on the GUI toggle state)
+        -- This is an example if you want to adjust the UI feedback:
+        -- reverseButton.BackgroundColor3 = flashbackEnabled and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(35, 35, 35)
+        -- reverseButton.Text = flashbackEnabled and "UnReverse" or "Reverse"
+
+        -- Adjust all currently playing animations
+        local char = getCharacter()
+        local hum = char:FindFirstChildWhichIsA("Humanoid")
+        local animator = hum:FindFirstChildOfClass("Animator")
+
+        if animator then
+            for _, animationTrack in pairs(animator:GetPlayingAnimationTracks()) do
+                animationTrack:AdjustSpeed(flashbackEnabled and -1 or 1) -- Set speed to -1 when reversing, reset to 1 otherwise
+            end
+        end
+    end
+})
+
+-- Update movement on RenderStepped
+RS.RenderStepped:Connect(function()
+    local char = getCharacter()
+    local hrp = getHRP(char)
+    local hum = char:FindFirstChildWhichIsA("Humanoid")
+
+    if flashbackEnabled then
+        revertMovement(char, hrp, hum)
+    else
+        advanceMovement(char, hrp, hum)
+    end
+end)
+
+
+
+local platforms = {}
+local headSitActive = false -- Start with HeadSit inactive
+local player = game.Players.LocalPlayer
+
+-- Function to create and attach a platform above a player's head
+local function createPlatformAboveHead(targetPlayer)
+    local targetCharacter = targetPlayer.Character
+    if targetCharacter then
+        local head = targetCharacter:FindFirstChild("Head")
+        if head then
+            -- Check if a platform already exists for this player
+            if not platforms[targetPlayer.UserId] then
+                -- Create a new part for the platform
+                local platform = Instance.new("Part")
+                platform.Size = Vector3.new(3, 0.2, 3) -- Size of the platform
+                platform.Anchored = true -- Keep it anchored
+                platform.CanCollide = true -- Make it collidable
+                platform.BrickColor = BrickColor.new("Bright blue") -- Change color as needed
+                platform.Material = Enum.Material.SmoothPlastic
+                platform.Parent = workspace
+
+                -- Position the platform above the player's head (lowered)
+                platform.CFrame = head.CFrame * CFrame.new(0, 0.8, 0) -- Adjusted height to be lower
+
+                -- Store the platform in the table
+                platforms[targetPlayer.UserId] = platform
+
+                -- Update the platform's position on Heartbeat
+                local connection
+                connection = game:GetService("RunService").Heartbeat:Connect(function()
+                    if targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
+                        local updatedHead = targetPlayer.Character.Head
+                        platform.CFrame = updatedHead.CFrame * CFrame.new(0, 0.8, 0) -- Update position above the head
+                    else
+                        -- Remove the platform if the player is no longer valid
+                        platforms[targetPlayer.UserId] = nil
+                        platform:Destroy()
+                        connection:Disconnect() -- Disconnect the event
+                    end
+                end)
+            end
+        end
+    end
+end
+
+-- Create the button for toggling HeadSit functionality
+local Button = Tab2:CreateButton({
+    Name = "Toggle HeadSit", 
+    Callback = function()
+        headSitActive = not headSitActive
+        if headSitActive then
+            -- Create platforms for nearby players when toggled on
+            for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
+                if otherPlayer ~= player then
+                    createPlatformAboveHead(otherPlayer)
+                end
+            end
+        else
+            -- Cleanup all platforms when toggled off
+            for userId, platform in pairs(platforms) do
+                platform:Destroy()
+                platforms[userId] = nil
+            end
+        end
+    end,
+})
+
+-- Function to reset the GUI on character respawn
+local function resetGui()
+    -- If the GUI already exists, destroy it before creating a new one
+    if player.PlayerGui:FindFirstChild("HeadSitGui") then
+        player.PlayerGui.HeadSitGui:Destroy()
+    end
+    -- Recreate the GUI elements if necessary
+end
+
+-- Connect the character added event to recreate the GUI
+player.CharacterAdded:Connect(resetGui)
+
+-- Call to create the initial GUI if necessary
+resetGui()
+
+
+
+
+
+-- Function to create the Lay Down button in Rayfield
+local function createLayDownButton()
+    -- Create the button using Rayfield
+    Tab:CreateButton({
+        Name = "Lay Down",
+        Callback = function()
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+            local animator = humanoid:FindFirstChildOfClass("Animator")
+
+            if humanoid and hrp and animator then
+                humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+                humanoid.PlatformStand = true -- Prevent movement
+                hrp.CFrame = hrp.CFrame * CFrame.new(0, -1, 0) * CFrame.Angles(math.rad(90), 0, 0) -- Adjust to lay down
+
+                -- Load and play the animation
+                local animation = Instance.new("Animation")
+                animation.AnimationId = "rbxassetid://90841854866960"
+                local animationTrack = animator:LoadAnimation(animation)
+
+                animationTrack:Play() -- Play the animation
+                animationTrack.TimePosition = 0.45 -- Start from 2 seconds
+                animationTrack:AdjustSpeed(0) -- Pause the animation
+
+                humanoid.PlatformStand = false -- Allow jumping again
+            end
+        end
+    })
+end
+
+-- Create the Lay Down button when the player joins
+createLayDownButton()
+
+
+
+
+local Button = Tab:CreateButton({
+    Name = "Get Up",  -- Button label
+    Callback = function()
+        -- The function that takes place when the button is pressed
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        local animator = humanoid:FindFirstChildOfClass("Animator")
+
+        if humanoid and animator then
+            -- Stop all currently playing animations
+            for _, track in ipairs(animator:GetPlayingAnimationTracks()) do
+                track:Stop()
+            end
+
+            -- Play the new animation
+            local animation = Instance.new("Animation")
+            animation.AnimationId = "rbxassetid://15693621070"
+            local animationTrack = animator:LoadAnimation(animation)
+
+            animationTrack:Play() -- Play the animation
+            animationTrack.TimePosition = 1.60 -- Start from 1.60 seconds
+            animationTrack:AdjustSpeed(-1) -- Play the animation in reverse
+
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping) -- Make the character jump
+
+            wait(1) -- Wait for 1 second
+            animationTrack:Stop() -- Stop the animation
+        end
+    end,
+})
+
+
+
+local Divider = Tab2:CreateDivider()  ------------------------------invisible
+
+ getgenv().FlySpeed = 0.08 
+getgenv().www = false
+getgenv().aaa = false
+getgenv().sss = false
+getgenv().ddd = false
+getgenv().qqq = false
+getgenv().eee = false
+getgenv().en = false
+getgenv().currentcf = nil
+
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+getgenv().ssss = mouse
+
+-- Prevent parts from being destroyed
+workspace.FallenPartsDestroyHeight = math.huge - math.huge
+
+-- Create an invisible anchor part
+local part = Instance.new("Part")
+part.Name = "a"
+part.Anchored = true
+part.Parent = workspace
+part.CFrame = CFrame.new(0, -600000, 0)
+
+-- Function to toggle invisibility
+function toggleInvisibility()
+    if getgenv().en then 
+        getgenv().en = false
+        player.Character.HumanoidRootPart.Anchored = false
+    else 
+        getgenv().en = true
+        getgenv().currentcf = player.Character.HumanoidRootPart.CFrame
+        player.Character.HumanoidRootPart.CFrame = part.CFrame
+        task.wait(0.2)
+        player.Character.HumanoidRootPart.Anchored = true
+        task.wait()
+        player.Character.HumanoidRootPart.CFrame = getgenv().currentcf
+    end
+end
+
+
+Tab2:CreateButton({
+    Name = "Toggle Invisibility",
+    Callback = function()
+        toggleInvisibility()
+        Rayfield:Notify({
+            Title = "Invisibility",
+            Content = getgenv().en and "Enabled" or "Disabled",
+            Duration = 3
+        })
+    end
+})
+
+Tab2:CreateSlider({
+    Name = "Fly Speed",
+    Range = {0.01, 1}, -- Adjust max/min as needed
+    Increment = 0.08,
+    Suffix = "Speed",
+    CurrentValue = getgenv().FlySpeed or 1,
+    Flag = "FlySpeedSlider",
+    Callback = function(Value)
+        getgenv().FlySpeed = Value
+        Rayfield:Notify({
+            Title = "Fly Speed Updated",
+            Content = "Fly speed set to " .. Value,
+            Duration = 0.3
+        })
+    end,
+})
+
+
+-- Key Input Handling
+mouse.KeyDown:Connect(function(key)
+    key = key:lower()
+    if key == "" then
+        getgenv().FlySpeed += 0.1
+    elseif key == "" then
+        getgenv().FlySpeed = 0.2
+    elseif key == "w" then
+        getgenv().www = true
+    elseif key == "a" then
+        getgenv().aaa = true
+    elseif key == "s" then
+        getgenv().sss = true
+    elseif key == "d" then
+        getgenv().ddd = true
+    elseif key == "" then
+        getgenv().qqq = true
+    elseif key == "" then
+        getgenv().eee = true
+    elseif key == "" then
+        toggleInvisibility()
+    end
+end)
+
+mouse.KeyUp:Connect(function(key)
+    key = key:lower()
+    if key == "w" then
+        getgenv().www = false
+    elseif key == "a" then
+        getgenv().aaa = false
+    elseif key == "s" then
+        getgenv().sss = false
+    elseif key == "d" then
+        getgenv().ddd = false
+    elseif key == "" then
+        getgenv().qqq = false
+    elseif key == "" then
+        getgenv().eee = false
+    end
+end)
+
+-- Movement logic (you can add your fly movement logic here)
+game:GetService("RunService").RenderStepped:Connect(function()
+    if getgenv().en and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local root = player.Character.HumanoidRootPart
+        local camCF = workspace.CurrentCamera.CFrame
+        local moveVec = Vector3.zero
+
+        if getgenv().www then moveVec += camCF.LookVector end
+        if getgenv().sss then moveVec -= camCF.LookVector end
+        if getgenv().aaa then moveVec -= camCF.RightVector end
+        if getgenv().ddd then moveVec += camCF.RightVector end
+        if getgenv().qqq then moveVec += camCF.UpVector end
+        if getgenv().eee then moveVec -= camCF.UpVector end
+
+        if moveVec.Magnitude > 0 then
+            root.CFrame = root.CFrame + (moveVec.Unit * getgenv().FlySpeed)
+        end
+    end
+end)
+
+
+local Divider = Tab2:CreateDivider()  ------------------------------climb
+local player = game.Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local climbSpeed = 20
+local isClimbing = false
+local boosted = false
+local climbingEnabled = false
+
+local humanoid, rootPart
+local climbTrack, jumpTrack
+local bodyVelocity = Instance.new("BodyVelocity")
+bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+bodyVelocity.Velocity = Vector3.new(0, climbSpeed, 0)
+bodyVelocity.P = 1250
+
+local character
+
+-- Function to load animations and character parts
+local function setupCharacter(char)
+	character = char
+	humanoid = character:WaitForChild("Humanoid")
+	rootPart = character:WaitForChild("HumanoidRootPart")
+
+	local climbAnim = Instance.new("Animation")
+	climbAnim.AnimationId = "rbxassetid://88763136693023"
+	climbTrack = humanoid:LoadAnimation(climbAnim)
+	climbTrack.Priority = Enum.AnimationPriority.Movement
+
+	local jumpAnim = Instance.new("Animation")
+	jumpAnim.AnimationId = "rbxassetid://10714360164"
+	jumpTrack = humanoid:LoadAnimation(jumpAnim)
+	jumpTrack.Priority = Enum.AnimationPriority.Action
+end
+
+-- Check climbable parts
+local function isClimbable(part)
+	if not part or not part:IsA("BasePart") then return false end
+	if part.Transparency >= 0.95 then return false end
+	if part.Size.Y < 0.5 or part.Size.X < 0.5 then return false end
+	return part.CanCollide
+end
+
+-- Jump logic (backwards + fall anim)
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed or not climbingEnabled then return end
+	if input.KeyCode == Enum.KeyCode.Space and isClimbing then
+		if climbTrack and climbTrack.IsPlaying then climbTrack:Stop() end
+		boosted = false
+		jumpTrack:Play()
+		jumpTrack.TimePosition = 0.68
+		jumpTrack:AdjustSpeed(0.7)
+
+		-- Move backwards when falling
+		local moveBack = Instance.new("BodyVelocity")
+		moveBack.MaxForce = Vector3.new(9999, 9999, 9999)
+		moveBack.Velocity = -rootPart.CFrame.LookVector * 25
+		moveBack.P = 1250
+		moveBack.Parent = rootPart
+
+		task.delay(0.3, function()
+			moveBack:Destroy()
+		end)
+
+		isClimbing = false
+	end
+end)
+
+-- Speed boost logic
+RunService.Heartbeat:Connect(function()
+	if not climbingEnabled or not jumpTrack then return end
+	if jumpTrack.IsPlaying and not boosted then
+		if jumpTrack.TimePosition >= 1.08 then
+			jumpTrack:AdjustSpeed(2.5)
+			boosted = true
+		end
+	end
+end)
+
+-- Climbing detection loop
+RunService.Heartbeat:Connect(function()
+	if not climbingEnabled or not rootPart or not humanoid then return end
+
+	local params = RaycastParams.new()
+	params.FilterDescendantsInstances = {character}
+	params.FilterType = Enum.RaycastFilterType.Blacklist
+
+	-- Multi-ray check: center, above, below
+	local offsets = {
+		Vector3.new(0, 0, 0),
+		Vector3.new(0, 2, 0),
+		Vector3.new(0, -2, 0),
+	}
+
+	local foundClimbable = false
+	for _, offset in ipairs(offsets) do
+		local origin = rootPart.Position + offset
+		local direction = rootPart.CFrame.LookVector * 3
+		local result = workspace:Raycast(origin, direction, params)
+
+		if result and isClimbable(result.Instance) then
+			foundClimbable = true
+			break
+		end
+	end
+
+	if foundClimbable then
+		if not bodyVelocity.Parent then
+			bodyVelocity.Parent = rootPart
+		end
+
+		bodyVelocity.Velocity = Vector3.new(0, climbSpeed, 0)
+
+		if not climbTrack.IsPlaying then
+			climbTrack:Play()
+		end
+
+		climbTrack:AdjustSpeed(climbSpeed / 10)
+		isClimbing = true
+	else
+		if bodyVelocity.Parent then bodyVelocity.Parent = nil end
+		if climbTrack and climbTrack.IsPlaying then climbTrack:Stop() end
+		isClimbing = false
+	end
+end)
+
+-- Setup on first character load
+if player.Character then
+	setupCharacter(player.Character)
+end
+
+-- Setup on character respawn
+player.CharacterAdded:Connect(function(char)
+	if climbTrack and climbTrack.IsPlaying then climbTrack:Stop() end
+	if jumpTrack and jumpTrack.IsPlaying then jumpTrack:Stop() end
+	bodyVelocity.Parent = nil
+	isClimbing = false
+	boosted = false
+	setupCharacter(char)
+end)
+
+-- Toggle UI
+local Toggle = Tab2:CreateToggle({
+	Name = "Auto Climb",
+	CurrentValue = false,
+	Flag = "ToggleAutoClimb",
+	Callback = function(Value)
+		climbingEnabled = Value
+		if not climbingEnabled then
+			if bodyVelocity.Parent then bodyVelocity.Parent = nil end
+			if climbTrack and climbTrack.IsPlaying then climbTrack:Stop() end
+			if jumpTrack and jumpTrack.IsPlaying then jumpTrack:Stop() end
+			isClimbing = false
+			boosted = false
+		end
+	end,
+})
+
+-- Slider UI for climbSpeed
+local Slider = Tab2:CreateSlider({
+	Name = "Climb Speed",
+	Range = {5, 50},
+	Increment = 1,
+	Suffix = "Speed",
+	CurrentValue = climbSpeed,
+	Flag = "SliderClimbSpeed",
+	Callback = function(Value)
+		climbSpeed = Value
+		if isClimbing then
+			bodyVelocity.Velocity = Vector3.new(0, climbSpeed, 0)
+			climbTrack:AdjustSpeed(climbSpeed / 10)
+		end
+	end,
+})
+
+
+
+local Divider = Tab:CreateDivider()                  --------------------------------------------------UNDERGROUND
+
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+local originalPosition
+local currentPosition
+local isInvisible = false
+local handle
+local weld
+local normalHeight = 5  -- Set the height where the player should appear when visible
+local currentCameraRotation = math.rad(90)  -- Start with 90 degrees rotation
+local platform  -- Variable to hold the platform instance
+
+-- Create a platform above the void to stand on
+local voidLevelY = -10  -- The Y-axis level that represents the void (adjust this value as needed)
+local platformHeight = 1  -- Thickness of the platform
+local platformSize = Vector3.new(1000, platformHeight, 1000)  -- Size of the platform (adjust to your liking)
+
+-- Toggle invisibility function
+local function toggleInvisibility()
+    if isInvisible then
+        -- When going visible, use the current position to place the player above ground
+        local newPosition = Vector3.new(player.Character.HumanoidRootPart.Position.X, normalHeight, player.Character.HumanoidRootPart.Position.Z)
+        
+        -- Get the camera's current yaw (rotation around the Y axis)
+        local cameraYaw = camera.CFrame.LookVector
+        local angle = math.atan2(cameraYaw.X, cameraYaw.Z)  -- Calculate angle based on the LookVector
+        
+        -- Invert the angle by adding 180 degrees (math.pi)
+        local invertedAngle = angle + math.pi
+        
+        -- Set the player's position and rotation to match the camera's inverted rotation
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition) * CFrame.Angles(0, invertedAngle, 0)
+        
+        -- Re-enable the camera subject to the player
+        camera.CameraSubject = player.Character.Humanoid
+        
+        -- Destroy the handle if it's created
+        if handle then
+            handle:Destroy()
+        end
+        
+        -- Destroy the platform if it's created
+        if platform then
+            platform:Destroy()
+            platform = nil
+        end
+    else
+        -- Save the current position when going invisible (only save the X, Y, Z position for reference)
+        currentPosition = player.Character.HumanoidRootPart.Position
+        
+        -- Move character below the map (height -7) while keeping movement active
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(currentPosition.X, -7, currentPosition.Z)
+        
+        -- Create the "handle" to keep the camera above the map
+        if not handle then
+            handle = Instance.new("Part", workspace)
+            handle.Name = "Handle"
+            handle.Size = Vector3.new(2, 1, 1)
+            handle.Transparency = 1
+            handle.CanCollide = false
+            
+            -- Weld the handle to the player's HumanoidRootPart so it moves with the player
+            weld = Instance.new("Weld", handle)
+            weld.Part0 = handle
+            weld.Part1 = player.Character.HumanoidRootPart
+            weld.C0 = CFrame.new(0, 10, 0)  -- Position the camera's "handle" above the character
+            
+            -- Position the camera above the map (stay above the ground even when under it)
+            camera.CameraSubject = handle
+        end
+
+        -- Create the platform above the void
+        if not platform then
+            platform = Instance.new("Part")
+            platform.Size = platformSize
+            platform.Anchored = true
+            platform.CanCollide = true  -- Enable collision so you can stand on it
+            platform.Position = Vector3.new(0, voidLevelY + (platformHeight / 2), 0)  -- Place the platform at the void level
+            platform.Transparency = 1  -- Make the platform invisible
+            platform.Name = "VoidPlatform"
+            platform.Parent = game.Workspace  -- Add the platform to the game workspace
+
+            -- Optional: Prevent the platform from being destroyed by game mechanics
+            platform.CanTouch = true
+            platform.CanQuery = true
+        end
+    end
+
+    isInvisible = not isInvisible
+end
+
+-- Update the camera's position when the player is invisible
+local function updateCameraPosition()
+    if isInvisible and handle then
+        -- Keep the handle positioned above the player at all times while moving
+        handle.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0)
+        
+        -- Make the camera always face the current rotation
+        local cameraPosition = camera.CFrame.Position
+        local newCameraCFrame = CFrame.new(cameraPosition.X, player.Character.HumanoidRootPart.Position.Y + 10, cameraPosition.Z) * CFrame.Angles(0, currentCameraRotation, 0)
+        camera.CFrame = newCameraCFrame
+    end
+end
+
+-- Rotate the camera through the sequence of angles: 90, 0, 270, 180
+local function rotateCamera()
+    if isInvisible then
+        -- Cycle through the rotations in order: 90 -> 0 -> 270 -> 180 -> 90 -> ...
+        if currentCameraRotation == math.rad(90) then
+            currentCameraRotation = math.rad(0)
+        elseif currentCameraRotation == math.rad(0) then
+            currentCameraRotation = math.rad(270)
+        elseif currentCameraRotation == math.rad(270) then
+            currentCameraRotation = math.rad(180)
+        else
+            currentCameraRotation = math.rad(90)
+        end
+    end
+end
+
+-- Create the invisibility toggle button
+local toggleInvisibilityButton = Tab:CreateButton({
+    Name = "Toggle Underground",
+    Callback = function()
+        toggleInvisibility()
+    end,
+})
+
+-- Create the rotate camera button
+local rotateCameraButton = Tab:CreateButton({
+    Name = "Rotate Camera",
+    Callback = function()
+        rotateCamera()
+    end,
+})
+
+-- Update the camera position continuously when invisible
+game:GetService("RunService").RenderStepped:Connect(updateCameraPosition)
+
+
+
+
+
+
+local Tab4 = Window:CreateTab("AnimPack", "zap")
+
+local Section = Tab4:CreateSection("Fly")
+
+
+
+local FlyEnabled = false
+local BodyGyro, BodyVel
+local ctrl = {f = 0, b = 0, l = 0, r = 0}
+local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+local KeyDownConnection, KeyUpConnection
+local speed = 0
+local FlySpeed = 50
+local AnimationTrack = nil
+
+-- Play animation utility
+local function PlayAnim(animId, animSpeed, fadeTime)
+	local plr = game.Players.LocalPlayer
+	local char = plr.Character or plr.CharacterAdded:Wait()
+	local hum = char:FindFirstChildOfClass("Humanoid")
+	if not hum then return end
+
+	-- Stop old animation
+	if AnimationTrack then
+		AnimationTrack:Stop()
+		AnimationTrack:Destroy()
+	end
+
+	-- Create and play new animation
+	local anim = Instance.new("Animation")
+	anim.AnimationId = "rbxassetid://" .. tostring(animId)
+	AnimationTrack = hum:LoadAnimation(anim)
+
+	AnimationTrack:Play(fadeTime or 0.1)
+	AnimationTrack:AdjustSpeed(animSpeed or 1)
+end
+
+local Button = Tab4:CreateButton({
+	Name = "Fly",
+	Callback = function()
+		local plr = game.Players.LocalPlayer
+		local mouse = plr:GetMouse()
+		local character = plr.Character or plr.CharacterAdded:Wait()
+		local humanoid = character:FindFirstChild("Humanoid")
+		local torso = character:FindFirstChild("UpperTorso") or character:FindFirstChild("HumanoidRootPart")
+		if not torso then return end
+
+		FlyEnabled = not FlyEnabled
+
+		if FlyEnabled then
+			-- Setup
+			BodyGyro = Instance.new("BodyGyro", torso)
+			BodyGyro.P = 9e4
+			BodyGyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+			BodyGyro.cframe = torso.CFrame
+
+			BodyVel = Instance.new("BodyVelocity", torso)
+			BodyVel.velocity = Vector3.new(0, 0.1, 0)
+			BodyVel.maxForce = Vector3.new(9e9, 9e9, 9e9)
+
+			KeyDownConnection = mouse.KeyDown:Connect(function(k)
+				k = k:lower()
+				if k == "w" then
+					ctrl.f = 1
+					PlayAnim(99384245425157, 1.94, 0) -- forward anim
+				elseif k == "s" then
+					ctrl.b = -1
+					PlayAnim(10147823318, 4.11, 0.1)
+				elseif k == "a" then
+					ctrl.l = -1
+					PlayAnim(10147823318, 3.55, 0.1)
+				elseif k == "d" then
+					ctrl.r = 1
+					PlayAnim(10147823318, 4.81, 0.1)
+				end
+			end)
+
+			KeyUpConnection = mouse.KeyUp:Connect(function(k)
+				k = k:lower()
+				if k == "w" then ctrl.f = 0
+				elseif k == "s" then ctrl.b = 0
+				elseif k == "a" then ctrl.l = 0
+				elseif k == "d" then ctrl.r = 0 end
+				PlayAnim(15698404340, 1, 0.3) -- idle/floating anim
+			end)
+
+			coroutine.wrap(function()
+				while FlyEnabled and character.Parent do
+					task.wait()
+					humanoid.PlatformStand = true
+
+					if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+						speed = math.clamp(speed + FlySpeed * 0.1, 0, FlySpeed)
+					elseif speed > 0 then
+						speed = math.clamp(speed - FlySpeed * 0.1, 0, FlySpeed)
+					end
+
+					if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+						BodyVel.velocity = ((workspace.CurrentCamera.CFrame.lookVector * (ctrl.f + ctrl.b)) +
+							((workspace.CurrentCamera.CFrame * CFrame.new(ctrl.l + ctrl.r, (ctrl.f + ctrl.b) * 0.2, 0).p) - workspace.CurrentCamera.CFrame.p)) * speed
+						lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+					elseif speed ~= 0 then
+						BodyVel.velocity = ((workspace.CurrentCamera.CFrame.lookVector * (lastctrl.f + lastctrl.b)) +
+							((workspace.CurrentCamera.CFrame * CFrame.new(lastctrl.l + lastctrl.r, (lastctrl.f + lastctrl.b) * 0.2, 0).p) - workspace.CurrentCamera.CFrame.p)) * speed
+					else
+						BodyVel.velocity = Vector3.new(0, 0.1, 0)
+					end
+
+					BodyGyro.cframe = workspace.CurrentCamera.CFrame * CFrame.Angles(
+						-math.rad((ctrl.f + ctrl.b) * 50 * speed / FlySpeed), 0, 0)
+				end
+
+				humanoid.PlatformStand = false
+				if BodyGyro then BodyGyro:Destroy() end
+				if BodyVel then BodyVel:Destroy() end
+				if AnimationTrack then AnimationTrack:Stop() AnimationTrack:Destroy() end
+			end)()
+		else
+			if KeyDownConnection then KeyDownConnection:Disconnect() end
+			if KeyUpConnection then KeyUpConnection:Disconnect() end
+			if AnimationTrack then AnimationTrack:Stop() AnimationTrack:Destroy() end
+			humanoid.PlatformStand = false
+		end
+	end
+})
+
+
+local FlySpeedSlider = Tab4:CreateSlider({
+   Name = "FlySpeed",
+   Range = {10, 150}, -- You can adjust min/max as you prefer
+   Increment = 5,
+   Suffix = "Speed",
+   CurrentValue = FlySpeed, -- uses the same FlySpeed variable from your fly script
+   Flag = "FlySpeedSlider",
+   Callback = function(Value)
+      FlySpeed = Value
+      game:GetService("StarterGui"):SetCore("SendNotification", {
+         Title = "FlySpeed Updated",
+         Text = "Fly speed set to " .. Value,
+         Duration = 0
+      })
+   end,
+})
+
+
+
+
+local Divider = Tab4:CreateDivider()
+local Section = Tab4:CreateSection("ZCustomsAnimations")
+local plr = game.Players.LocalPlayer
+
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    Animate.Disabled = true
+
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    Animate.idle.Animation1.AnimationId = "rbxassetid://115353994761101"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://74785222555193"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://87721497492370"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://87721497492370"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://74833960662078"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://98505666877404"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://130626573323655"
+
+    if Animate:FindFirstChild("swim") then
+        local swim = Animate.swim
+        if swim:FindFirstChild("SwimIdle") then
+            swim.SwimIdle.AnimationId = "rbxassetid://133308483266208"
+        end
+        if swim:FindFirstChild("Swim") then
+            swim.Swim.AnimationId = "rbxassetid://109346520324160"
+        end
+    end
+
+    Animate.Disabled = false
+
+    -- Speed up jump animation
+    humanoid.AnimationPlayed:Connect(function(track)
+        if track.Animation.AnimationId == "rbxassetid://74833960662078" then
+            track:AdjustSpeed(2) -- 1 = normal speed, 1.5 = faster
+        end
+    end)
+
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "ZsCustomAnim1",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+local plr = game.Players.LocalPlayer
+
+-- Shared climb for all sets
+local SHARED_CLIMB = "rbxassetid://18537363391"
+
+local sets = {
+    heroz = {
+        idle = "rbxassetid://83321778677390",
+        walk = "rbxassetid://85811471336028",
+        run  = "rbxassetid://85811471336028",
+        jump = "rbxassetid://122491766816154",
+        climb = SHARED_CLIMB
+    },
+    hitmanz = {
+        idle = "rbxassetid://103728282064378",
+        walk = "rbxassetid://76630051272791",
+        run  = "rbxassetid://76630051272791",
+        jump = "rbxassetid://122491766816154",
+        climb = SHARED_CLIMB
+    },
+    kungfo = {
+        idle = "rbxassetid://94099018230089",
+        walk = "rbxassetid://85811471336028",
+        run  = "rbxassetid://81851725854678",
+        jump = "rbxassetid://122491766816154",
+        climb = SHARED_CLIMB
+    },
+    zombiez = {
+        idle = "rbxassetid://77902544544578",
+        walk = "rbxassetid://113076603308515",
+        run  = "rbxassetid://109480626205021",
+        jump = "rbxassetid://74833960662078",
+        climb = SHARED_CLIMB
+    },
+    
+}
+
+local function applySet(ids)
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    Animate.Disabled = true
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        pcall(function() track:Stop() end)
+    end
+
+    -- idle (mirror into both slots if present)
+    if Animate:FindFirstChild("idle") then
+        local idle = Animate.idle
+        if idle:FindFirstChild("Animation1") then idle.Animation1.AnimationId = ids.idle end
+        if idle:FindFirstChild("Animation2") then idle.Animation2.AnimationId = ids.idle end
+    end
+
+    -- walk/run
+    if Animate:FindFirstChild("walk") and Animate.walk:FindFirstChild("WalkAnim") then
+        Animate.walk.WalkAnim.AnimationId = ids.walk
+    end
+    if Animate:FindFirstChild("run") and Animate.run:FindFirstChild("RunAnim") then
+        Animate.run.RunAnim.AnimationId = ids.run
+    end
+
+    -- jump
+    if Animate:FindFirstChild("jump") and Animate.jump:FindFirstChild("JumpAnim") then
+        Animate.jump.JumpAnim.AnimationId = ids.jump
+    end
+
+    -- climb (shared)
+    if Animate:FindFirstChild("climb") and Animate.climb:FindFirstChild("ClimbAnim") then
+        Animate.climb.ClimbAnim.AnimationId = ids.climb
+    end
+
+    Animate.Disabled = false
+
+    -- speed up the jump anim whenever it plays
+    humanoid.AnimationPlayed:Connect(function(track)
+        local ok, anim = pcall(function() return track.Animation end)
+        if ok and anim and anim.AnimationId == ids.jump then
+            track:AdjustSpeed(2)
+        end
+    end)
+end
+
+-- Buttons
+Tab4:CreateButton({
+    Name = "ZsCustomAnim - HeroZ",
+    Callback = function() applySet(sets.heroz) end,
+})
+
+Tab4:CreateButton({
+    Name = "ZsCustomAnim - HitmanZ",
+    Callback = function() applySet(sets.hitmanz) end,
+})
+
+Tab4:CreateButton({
+    Name = "ZsCustomAnim - KungFo",
+    Callback = function() applySet(sets.kungfo) end,
+})
+
+Tab4:CreateButton({
+    Name = "ZsCustomAnim - Zombie",
+    Callback = function() applySet(sets.zombiez) end,
+})
+
+
+
+-- CreepyZ (force move anim = 3.5x; jump = 2x)
+local RunService = game:GetService("RunService")
+local creepyzHB -- heartbeat enforcer (prevents Animate from overriding)
+
+Tab4:CreateButton({
+    Name = "ZsCustomAnim - CreepyZ",
+    Callback = function()
+        local plr = game.Players.LocalPlayer
+        local character = plr.Character or plr.CharacterAdded:Wait()
+        local Animate = character:WaitForChild("Animate")
+        local humanoid = character:WaitForChild("Humanoid")
+
+        local IDLE  = "rbxassetid://104260298962490"
+        local MOVE  = "rbxassetid://78248345283040"  -- used for walk/run in this pack
+        local JUMP  = "rbxassetid://116505048092780"
+        local CLIMB = "rbxassetid://18537363391"
+
+        -- apply IDs
+        Animate.Disabled = true
+        for _, t in ipairs(humanoid:GetPlayingAnimationTracks()) do pcall(function() t:Stop() end) end
+
+        if Animate:FindFirstChild("idle") then
+            local idle = Animate.idle
+            if idle:FindFirstChild("Animation1") then idle.Animation1.AnimationId = IDLE end
+            if idle:FindFirstChild("Animation2") then idle.Animation2.AnimationId = IDLE end
+        end
+        if Animate:FindFirstChild("walk") and Animate.walk:FindFirstChild("WalkAnim") then
+            Animate.walk.WalkAnim.AnimationId = MOVE
+        end
+        if Animate:FindFirstChild("run") and Animate.run:FindFirstChild("RunAnim") then
+            Animate.run.RunAnim.AnimationId = MOVE
+        end
+        if Animate:FindFirstChild("jump") and Animate.jump:FindFirstChild("JumpAnim") then
+            Animate.jump.JumpAnim.AnimationId = JUMP
+        end
+        if Animate:FindFirstChild("climb") and Animate.climb:FindFirstChild("ClimbAnim") then
+            Animate.climb.ClimbAnim.AnimationId = CLIMB
+        end
+        Animate.Disabled = false
+
+        -- jump at 2x
+        humanoid.AnimationPlayed:Connect(function(track)
+            local a = track.Animation
+            if a and a.AnimationId == JUMP then
+                track:AdjustSpeed(2)
+            end
+        end)
+
+        -- keep MOVE anim at 3.5x (enforce every frame so Animate can't override)
+        if creepyzHB then creepyzHB:Disconnect() end
+        creepyzHB = RunService.Heartbeat:Connect(function()
+            for _, t in ipairs(humanoid:GetPlayingAnimationTracks()) do
+                local a = t.Animation
+                if a and a.AnimationId == MOVE and t.Speed ~= 3.5 then
+                    t:AdjustSpeed(3.5)
+                end
+            end
+        end)
+    end,
+})
+
+
+
+-- Services / helpers
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local function getRoot(char)
+    return char:FindFirstChild("HumanoidRootPart")
+        or char:FindFirstChild("Torso")
+        or char:FindFirstChild("UpperTorso")
+end
+
+----------------------------------------------------------------
+-- Global teardown: stops custom tracks/connections and re-enables default Animate
+local function DeactivateZAnimPack()
+    local plr = Players.LocalPlayer
+    local character = plr and (plr.Character or plr.CharacterAdded:Wait())
+    if not character then return end
+
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    local Animate  = character:FindFirstChild("Animate")
+    if not humanoid then return end
+
+    -- stop any playing tracks
+    for _, t in ipairs(humanoid:GetPlayingAnimationTracks()) do
+        pcall(function() t:Stop(0) end)
+    end
+
+    -- disconnect any saved connections from custom packs
+    if _G.__ZAnimConns then
+        for _, c in ipairs(_G.__ZAnimConns) do pcall(function() c:Disconnect() end) end
+        _G.__ZAnimConns = nil
+    end
+    if _G.__Z_ClimbConn then
+        pcall(function() _G.__Z_ClimbConn:Disconnect() end)
+        _G.__Z_ClimbConn = nil
+    end
+
+    -- IY Fly teardown
+    if _G.__Z_IYFly then
+        local F = _G.__Z_IYFly
+        if F.flyKeyDown then pcall(function() F.flyKeyDown:Disconnect() end) end
+        if F.flyKeyUp   then pcall(function() F.flyKeyUp:Disconnect() end) end
+        if F.BG then pcall(function() F.BG:Destroy() end) end
+        if F.BV then pcall(function() F.BV:Destroy() end) end
+        _G.__Z_IYFly = nil
+    end
+    if humanoid then pcall(function() humanoid.PlatformStand = false end) end
+    pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Custom end)
+
+    -- re-enable default Animate so normal packs work
+    if Animate then Animate.Disabled = false end
+
+    -- nudge state so Animate re-evaluates right away
+    pcall(function()
+        humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+        humanoid:ChangeState(Enum.HumanoidStateType.Running)
+    end)
+end
+
+----------------------------------------------------------------
+-- === Infinite Yield–style FLY (BodyGyro + BodyVelocity) ===
+local FLYING = false
+local QEfly = true
+local iyflyspeed = 1
+local vehicleflyspeed = 1
+
+-- store refs so teardown can kill them
+_G.__Z_IYFly = _G.__Z_IYFly or {}
+
+local function sFLY(vfly) -- vfly = vehicle mode (kept for API parity; we use same speed vars)
+    local plr = Players.LocalPlayer
+    local char = plr.Character or plr.CharacterAdded:Wait()
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    while not humanoid do
+        task.wait()
+        humanoid = char:FindFirstChildOfClass("Humanoid")
+    end
+
+    -- disconnect old input hooks if any
+    if _G.__Z_IYFly.flyKeyDown then _G.__Z_IYFly.flyKeyDown:Disconnect() end
+    if _G.__Z_IYFly.flyKeyUp   then _G.__Z_IYFly.flyKeyUp:Disconnect()   end
+
+    local T = getRoot(char)
+    if not T then return end
+
+    local CONTROL  = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+    local lCONTROL = {F = 0, B = 0, L = 0, R = 0}
+    local SPEED = 0
+
+    FLYING = true
+    local BG = Instance.new("BodyGyro")
+    local BV = Instance.new("BodyVelocity")
+    BG.P = 9e4
+    BG.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    BG.CFrame = T.CFrame
+    BG.Parent = T
+
+    BV.Velocity = Vector3.new()
+    BV.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    BV.Parent = T
+
+    _G.__Z_IYFly.BG = BG
+    _G.__Z_IYFly.BV = BV
+
+    task.spawn(function()
+        repeat
+            task.wait()
+            local camera = workspace.CurrentCamera
+            if not vfly and humanoid then
+                humanoid.PlatformStand = true
+            end
+
+            if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 or (CONTROL.Q + CONTROL.E) ~= 0 then
+                SPEED = 50
+            elseif SPEED ~= 0 then
+                SPEED = 0
+            end
+
+            if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 or (CONTROL.Q + CONTROL.E) ~= 0 then
+                BV.Velocity =
+                    ((camera.CFrame.LookVector * (CONTROL.F + CONTROL.B)) +
+                    ((camera.CFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - camera.CFrame.p)) * SPEED
+                lCONTROL = {F = CONTROL.F, B = CONTROL.B, L = CONTROL.L, R = CONTROL.R}
+            elseif SPEED ~= 0 then
+                BV.Velocity =
+                    ((camera.CFrame.LookVector * (lCONTROL.F + lCONTROL.B)) +
+                    ((camera.CFrame * CFrame.new(lCONTROL.L + lCONTROL.R, (lCONTROL.F + lCONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - camera.CFrame.p)) * SPEED
+            else
+                BV.Velocity = Vector3.new()
+            end
+            BG.CFrame = camera.CFrame
+        until not FLYING
+
+        CONTROL  = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+        lCONTROL = {F = 0, B = 0, L = 0, R = 0}
+        SPEED = 0
+        pcall(function() BG:Destroy() end)
+        pcall(function() BV:Destroy() end)
+        if humanoid then humanoid.PlatformStand = false end
+    end)
+
+    _G.__Z_IYFly.flyKeyDown = UserInputService.InputBegan:Connect(function(input, gpe)
+        if gpe then return end
+        if input.KeyCode == Enum.KeyCode.W then
+            CONTROL.F = (vfly and vehicleflyspeed or iyflyspeed)
+        elseif input.KeyCode == Enum.KeyCode.S then
+            CONTROL.B = - (vfly and vehicleflyspeed or iyflyspeed)
+        elseif input.KeyCode == Enum.KeyCode.A then
+            CONTROL.L = - (vfly and vehicleflyspeed or iyflyspeed)
+        elseif input.KeyCode == Enum.KeyCode.D then
+            CONTROL.R = (vfly and vehicleflyspeed or iyflyspeed)
+        elseif input.KeyCode == Enum.KeyCode.E and QEfly then
+            CONTROL.Q = (vfly and vehicleflyspeed or iyflyspeed)*2
+        elseif input.KeyCode == Enum.KeyCode.Q and QEfly then
+            CONTROL.E = -(vfly and vehicleflyspeed or iyflyspeed)*2
+        end
+        pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Track end)
+    end)
+
+    _G.__Z_IYFly.flyKeyUp = UserInputService.InputEnded:Connect(function(input, gpe)
+        if gpe then return end
+        if     input.KeyCode == Enum.KeyCode.W then CONTROL.F = 0
+        elseif input.KeyCode == Enum.KeyCode.S then CONTROL.B = 0
+        elseif input.KeyCode == Enum.KeyCode.A then CONTROL.L = 0
+        elseif input.KeyCode == Enum.KeyCode.D then CONTROL.R = 0
+        elseif input.KeyCode == Enum.KeyCode.E then CONTROL.Q = 0
+        elseif input.KeyCode == Enum.KeyCode.Q then CONTROL.E = 0 end
+    end)
+end
+
+local function NOFLY()
+    FLYING = false
+    if _G.__Z_IYFly.flyKeyDown then pcall(function() _G.__Z_IYFly.flyKeyDown:Disconnect() end) end
+    if _G.__Z_IYFly.flyKeyUp   then pcall(function() _G.__Z_IYFly.flyKeyUp:Disconnect() end)   end
+    local hum = Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if hum then pcall(function() hum.PlatformStand = false end) end
+    pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Custom end)
+end
+-- === END IY FLY ===
+----------------------------------------------------------------
+
+local RS = RunService
+
+local function ReplaceAnimations()
+    -- CLEAN SLATE so this pack won’t conflict with the previous one
+    DeactivateZAnimPack()
+
+    local plr = Players.LocalPlayer
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate   = character:WaitForChild("Animate")
+    local humanoid  = character:WaitForChild("Humanoid")
+    local animator  = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
+
+    -- IDs (yours)
+    local INTRO_ID     = "rbxassetid://120656084952492"
+    local INTRO_CUTOFF = 1.20
+    local IDLE_ID      = "rbxassetid://99828067051785"
+    local MOVE_ID      = "rbxassetid://89429132826447"
+    local CLIMB_ID     = "rbxassetid://16738332169"
+
+    _G.__ZAnimConns = {}
+    _G.__ZTracks = {}
+
+    -- take control
+    Animate.Disabled = true
+    for _, t in ipairs(humanoid:GetPlayingAnimationTracks()) do pcall(function() t:Stop(0) end) end
+
+    -- preload tracks
+    local idleAnim  = Instance.new("Animation"); idleAnim.AnimationId  = IDLE_ID
+    local moveAnim  = Instance.new("Animation"); moveAnim.AnimationId  = MOVE_ID
+    local climbAnim = Instance.new("Animation"); climbAnim.AnimationId = CLIMB_ID
+
+    local idleTrack  = animator:LoadAnimation(idleAnim);  idleTrack.Priority  = Enum.AnimationPriority.Idle;     idleTrack.Looped = true
+    local moveTrack  = animator:LoadAnimation(moveAnim);  moveTrack.Priority  = Enum.AnimationPriority.Movement; moveTrack.Looped = true
+    local climbTrack = animator:LoadAnimation(climbAnim); climbTrack.Priority = Enum.AnimationPriority.Action;   climbTrack.Looped = true
+
+    table.insert(_G.__ZTracks, idleTrack)
+    table.insert(_G.__ZTracks, moveTrack)
+    table.insert(_G.__ZTracks, climbTrack)
+
+    -- intro -> cut -> start idle (+ start IY fly)
+    local introAnim = Instance.new("Animation"); introAnim.AnimationId = INTRO_ID
+    local introTrack = animator:LoadAnimation(introAnim); introTrack.Priority = Enum.AnimationPriority.Action; introTrack.Looped = false
+    table.insert(_G.__ZTracks, introTrack)
+    introTrack:Play(0)
+
+    task.spawn(function()
+        while introTrack.IsPlaying and introTrack.TimePosition < INTRO_CUTOFF do RS.Heartbeat:Wait() end
+        introTrack:Stop(0)
+        RS.Heartbeat:Wait()
+        for _, t in ipairs(humanoid:GetPlayingAnimationTracks()) do pcall(function() t:Stop(0) end) end
+        RS.Heartbeat:Wait()
+        if not idleTrack.IsPlaying then idleTrack:Play(0) end
+        -- enable IY fly when idle starts
+        sFLY(false)
+    end)
+
+    -- state helpers
+    local function ensureIdle()
+        if moveTrack.IsPlaying then moveTrack:Stop(0.05) end
+        if climbTrack.IsPlaying then climbTrack:Stop(0) end
+        if not idleTrack.IsPlaying then idleTrack:Play(0.05) end
+        if not FLYING then sFLY(false) end -- idle = fly ON
+    end
+    local function ensureMove(scale)
+        if FLYING then NOFLY() end -- moving = fly OFF
+        if idleTrack.IsPlaying then idleTrack:Stop(0.05) end
+        if climbTrack.IsPlaying then climbTrack:Stop(0) end
+        if not moveTrack.IsPlaying then moveTrack:Play(0.05) end
+        moveTrack:AdjustSpeed(scale or 1)
+    end
+    local function ensureClimb()
+        if FLYING then NOFLY() end -- climbing = fly OFF
+        if idleTrack.IsPlaying then idleTrack:Stop(0.05) end
+        if moveTrack.IsPlaying then moveTrack:Stop(0.05) end
+        if not climbTrack.IsPlaying then climbTrack:Play(0.05) end
+        climbTrack:AdjustSpeed(2)
+    end
+
+    -- events
+    table.insert(_G.__ZAnimConns, humanoid.Running:Connect(function(speed)
+        local st = humanoid:GetState()
+        if st == Enum.HumanoidStateType.Climbing then return end
+        if st == Enum.HumanoidStateType.Freefall or st == Enum.HumanoidStateType.Jumping then
+            ensureMove(1) -- airborne uses MOVE anim and fly off
+            return
+        end
+        if speed > 0.1 then
+            local scale = math.clamp(humanoid.WalkSpeed / 16, 0.6, 1.8)
+            ensureMove(scale)
+        else
+            ensureIdle()
+        end
+    end))
+
+    table.insert(_G.__ZAnimConns, humanoid.StateChanged:Connect(function(_, new)
+        if new == Enum.HumanoidStateType.Climbing then
+            ensureClimb()
+        elseif new == Enum.HumanoidStateType.Freefall or new == Enum.HumanoidStateType.Jumping then
+            ensureMove(1)
+        elseif new == Enum.HumanoidStateType.Landed or new == Enum.HumanoidStateType.Running or new == Enum.HumanoidStateType.RunningNoPhysics then
+            local hrp = humanoid.RootPart
+            local v = hrp and hrp.Velocity or Vector3.zero
+            if Vector2.new(v.X, v.Z).Magnitude > 0.1 then
+                local scale = math.clamp(humanoid.WalkSpeed / 16, 0.6, 1.8)
+                ensureMove(scale)
+            else
+                ensureIdle()
+            end
+        end
+    end))
+end
+
+
+
+
+
+-- UI
+local Tab4 = Tab4 -- assuming you already have Tab4 from Rayfield
+local Divider = Tab4:CreateDivider()
+Tab4:CreateButton({
+    Name = "ZsCustomFlyAnim (Enable)",
+    Callback = function()
+        local ok, err = pcall(ReplaceAnimations)
+        if not ok then warn("Enable error: "..tostring(err)) end
+    end,
+})
+
+Tab4:CreateButton({
+    Name = "Use This To Disable It",
+    Callback = function()
+        local ok, err = pcall(DeactivateZAnimPack)
+        if not ok then warn("Deactivate error: "..tostring(err)) end
+    end,
+})
+local Divider = Tab4:CreateDivider()
+
+local Section = Tab4:CreateSection("RobloxAnimPacks")
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    Animate.Disabled = true
+
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    Animate.idle.Animation1.AnimationId = "rbxassetid://122257458498464"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://102357151005774"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://122150855457006"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://82598234841035"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://75290611992385"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://88763136693023"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://98600215928904"
+
+    -- Check if swim and its children exist before changing
+    if Animate:FindFirstChild("swim") then
+        local swim = Animate.swim
+        if swim:FindFirstChild("SwimIdle") then
+            swim.SwimIdle.AnimationId = "rbxassetid://133308483266208"
+        end
+        if swim:FindFirstChild("Swim") then
+            swim.Swim.AnimationId = "rbxassetid://109346520324160"
+        end
+    end
+
+    Animate.Disabled = false
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "AdidasCommunity",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+
+
+local plr = game.Players.LocalPlayer
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Disable Animate script to safely change animations
+    Animate.Disabled = true
+
+    -- Stop all currently playing animations
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    -- Set your custom animation asset IDs
+    Animate.idle.Animation1.AnimationId = "rbxassetid://18537371272"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://18537376492"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://18537392113"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://18537384940"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://18537380791"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://18537363391"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://18537367238"
+
+    -- Re-enable Animate script to apply changes
+    Animate.Disabled = false
+
+    -- Force Humanoid to refresh animations
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "AdidasSport",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+local plr = game.Players.LocalPlayer
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Disable Animate script to safely change animations
+    Animate.Disabled = true
+
+    -- Stop all currently playing animations
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    -- Set your custom animation asset IDs
+    Animate.idle.Animation1.AnimationId = "rbxassetid://133806214992291"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://94970088341563"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://109168724482748"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://81024476153754"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://116936326516985"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://119377220967554"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://92294537340807"
+
+    -- Re-enable Animate script to apply changes
+    Animate.Disabled = false
+
+    -- Force Humanoid to refresh animations
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "Catwalk",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+
+local plr = game.Players.LocalPlayer
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Disable Animate script to safely change animations
+    Animate.Disabled = true
+
+    -- Stop all currently playing animations
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    -- Set your custom animation asset IDs
+    Animate.idle.Animation1.AnimationId = "rbxassetid://92080889861410"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://74451233229259"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://110358958299415"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://117333533048078"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://119846112151352"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://134630013742019"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://129773241321032"
+
+    -- Re-enable Animate script to apply changes
+    Animate.Disabled = false
+
+    -- Force Humanoid to refresh animations
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "FootballNFL",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+
+local plr = game.Players.LocalPlayer
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Disable Animate script to safely change animations
+    Animate.Disabled = true
+
+    -- Stop all currently playing animations
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    -- Set your custom animation asset IDs
+    Animate.idle.Animation1.AnimationId = "rbxassetid://16738333868"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://16738334710"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://16738340646"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://16738337225"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://16738336650"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://16738332169"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://16738333171"
+
+    -- Re-enable Animate script to apply changes
+    Animate.Disabled = false
+
+    -- Force Humanoid to refresh animations
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "BoldAnimation",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+
+local plr = game.Players.LocalPlayer
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Disable Animate script to safely change animations
+    Animate.Disabled = true
+
+    -- Stop all currently playing animations
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    -- Set your custom animation asset IDs
+    Animate.idle.Animation1.AnimationId = "rbxassetid://18747067405"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://18747063918"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://18747074203"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://18747070484"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://18747069148"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://18747060903"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://18747062535"
+
+    -- Re-enable Animate script to apply changes
+    Animate.Disabled = false
+
+    -- Force Humanoid to refresh animations
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "NoBoundaries",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+
+local plr = game.Players.LocalPlayer
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Disable Animate script to safely change animations
+    Animate.Disabled = true
+
+    -- Stop all currently playing animations
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    -- Set your custom animation asset IDs
+    Animate.idle.Animation1.AnimationId = "rbxassetid://16738333868"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://16738334710"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://16738340646"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://16738337225"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://16738336650"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://16738332169"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://16738333171"
+
+    -- Re-enable Animate script to apply changes
+    Animate.Disabled = false
+
+    -- Force Humanoid to refresh animations
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "BoldAnimation",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+
+local plr = game.Players.LocalPlayer
+
+local function ReplaceAnimations()
+    local character = plr.Character or plr.CharacterAdded:Wait()
+    local Animate = character:WaitForChild("Animate")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Disable Animate script to safely change animations
+    Animate.Disabled = true
+
+    -- Stop all currently playing animations
+    for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+
+    -- Set your custom animation asset IDs
+    Animate.idle.Animation1.AnimationId = "rbxassetid://118832222982049"
+    Animate.idle.Animation2.AnimationId = "rbxassetid://76049494037641"
+    Animate.walk.WalkAnim.AnimationId = "rbxassetid://92072849924640"
+    Animate.run.RunAnim.AnimationId = "rbxassetid://72301599441680"
+    Animate.jump.JumpAnim.AnimationId = "rbxassetid://104325245285198"
+    Animate.climb.ClimbAnim.AnimationId = "rbxassetid://131326830509784"
+    Animate.fall.FallAnim.AnimationId = "rbxassetid://121152442762481"
+
+    -- Re-enable Animate script to apply changes
+    Animate.Disabled = false
+
+    -- Force Humanoid to refresh animations
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+local Button = Tab4:CreateButton({
+    Name = "WickedPopular",
+    Callback = function()
+        ReplaceAnimations()
+    end,
+})
+
+
+-- Base setup
+local plr = game.Players.LocalPlayer
+
+-- Function factory to create animation replacers
+local function MakeAnimationReplacer(idle1, idle2, walk, run, jump, climb, fall)
+    return function()
+        local character = plr.Character or plr.CharacterAdded:Wait()
+        local Animate = character:WaitForChild("Animate")
+        local humanoid = character:WaitForChild("Humanoid")
+
+        Animate.Disabled = true
+        for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+            track:Stop()
+        end
+
+        Animate.idle.Animation1.AnimationId = "rbxassetid://" .. idle1
+        Animate.idle.Animation2.AnimationId = "rbxassetid://" .. idle2
+        Animate.walk.WalkAnim.AnimationId = "rbxassetid://" .. walk
+        Animate.run.RunAnim.AnimationId = "rbxassetid://" .. run
+        Animate.jump.JumpAnim.AnimationId = "rbxassetid://" .. jump
+        Animate.climb.ClimbAnim.AnimationId = "rbxassetid://" .. climb
+        Animate.fall.FallAnim.AnimationId = "rbxassetid://" .. fall
+
+        Animate.Disabled = false
+        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end
+
+-- Buttons with their respective animations
+Tab4:CreateButton({ Name = "Vampire", Callback = MakeAnimationReplacer(1083445855, 1083450166, 1083473930, 1083462077, 1083455352, 1083439238, 1083443587) })
+Tab4:CreateButton({ Name = "Hero", Callback = MakeAnimationReplacer(616111295, 616113536, 616122287, 616117076, 616115533, 616104706, 616108001) })
+Tab4:CreateButton({ Name = "ZombieClassic", Callback = MakeAnimationReplacer(616158929, 616160636, 616168032, 616163682, 616161997, 616156119, 616157476) })
+Tab4:CreateButton({ Name = "Mage", Callback = MakeAnimationReplacer(707742142, 707855907, 707897309, 707861613, 707853694, 707826056, 707829716) })
+Tab4:CreateButton({ Name = "Ghost", Callback = MakeAnimationReplacer(616006778, 616008087, 616010382, 616013216, 616008936, 616003713, 616005863) })
+Tab4:CreateButton({ Name = "Elder", Callback = MakeAnimationReplacer(845397899, 845400520, 845403856, 845386501, 845398858, 845392038, 845396048) })
+Tab4:CreateButton({ Name = "Levitation", Callback = MakeAnimationReplacer(616006778, 616008087, 616013216, 616010382, 616008936, 616003713, 616005863) })
+Tab4:CreateButton({ Name = "Astronaut", Callback = MakeAnimationReplacer(891621366, 891633237, 891667138, 891636393, 891627522, 891609353, 891617961) })
+Tab4:CreateButton({ Name = "Ninja", Callback = MakeAnimationReplacer(656117400, 656118341, 656121766, 656118852, 656117878, 656114359, 656115606) })
+Tab4:CreateButton({ Name = "Werewolf", Callback = MakeAnimationReplacer(1083195517, 1083214717, 1083178339, 1083216690, 1083218792, 1083182000, 1083189019) })
+Tab4:CreateButton({ Name = "Cartoon", Callback = MakeAnimationReplacer(742637544, 742638445, 742640026, 742638842, 742637942, 742636889, 742637151) })
+
+
+
+-- Base setup
+local plr = game.Players.LocalPlayer
+
+-- Function factory to create animation replacers
+local function MakeAnimationReplacer(idle1, idle2, walk, run, jump, climb, fall)
+    return function()
+        local character = plr.Character or plr.CharacterAdded:Wait()
+        local Animate = character:WaitForChild("Animate")
+        local humanoid = character:WaitForChild("Humanoid")
+
+        Animate.Disabled = true
+        for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+            track:Stop()
+        end
+
+        Animate.idle.Animation1.AnimationId = "rbxassetid://" .. idle1
+        Animate.idle.Animation2.AnimationId = "rbxassetid://" .. idle2
+        Animate.walk.WalkAnim.AnimationId = "rbxassetid://" .. walk
+        Animate.run.RunAnim.AnimationId = "rbxassetid://" .. run
+        Animate.jump.JumpAnim.AnimationId = "rbxassetid://" .. jump
+        Animate.climb.ClimbAnim.AnimationId = "rbxassetid://" .. climb
+        Animate.fall.FallAnim.AnimationId = "rbxassetid://" .. fall
+
+        Animate.Disabled = false
+        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end
+
+-- Buttons with new animation styles
+Tab4:CreateButton({ Name = "Pirate", Callback = MakeAnimationReplacer(750781874, 750782770, 750785693, 750783738, 750782230, 750779899, 750780242) })
+Tab4:CreateButton({ Name = "Sneaky", Callback = MakeAnimationReplacer(1132473842, 1132477671, 1132510133, 1132494274, 1132489853, 1132461372, 1132469004) })
+Tab4:CreateButton({ Name = "Toy", Callback = MakeAnimationReplacer(782841498, 782845736, 782843345, 782842708, 782847020, 782843869, 782846423) })
+Tab4:CreateButton({ Name = "Knight", Callback = MakeAnimationReplacer(657595757, 657568135, 657552124, 657564596, 658409194, 658360781, 657600338) })
+Tab4:CreateButton({ Name = "Confident", Callback = MakeAnimationReplacer(1069977950, 1069987858, 1070017263, 1070001516, 1069984524, 1069946257, 1069973677) })
+Tab4:CreateButton({ Name = "Popstar", Callback = MakeAnimationReplacer(1212900985, 1212900985, 1212980338, 1212980348, 1212954642, 1213044953, 1212900995) })
+Tab4:CreateButton({ Name = "Princess", Callback = MakeAnimationReplacer(941003647, 941013098, 941028902, 941015281, 941008832, 940996062, 941000007) })
+Tab4:CreateButton({ Name = "Cowboy", Callback = MakeAnimationReplacer(1014390418, 1014398616, 1014421541, 1014401683, 1014394726, 1014380606, 1014384571) })
+Tab4:CreateButton({ Name = "Patrol", Callback = MakeAnimationReplacer(1149612882, 1150842221, 1151231493, 1150967949, 1150944216, 1148811837, 1148863382) })
+Tab4:CreateButton({ Name = "ZombieFE", Callback = MakeAnimationReplacer(3489171152, 3489171152, 3489174223, 3489173414, 616161997, 616156119, 616157476) })
+
+local Tab5 = Window:CreateTab("Target", "zap")
+
+
+
+local Section = Tab5:CreateSection("TargetPlayer")
+
+
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local TargetedPlayer = nil
+local isHeadsitting = false  -- toggle flag
+
+-- Function to get root part
+local function GetRoot(player)
+	if player and player.Character then
+		return player.Character:FindFirstChild("HumanoidRootPart")
+	end
+	return nil
+end
+
+-- Create velocity asset
+local Velocity_Asset = Instance.new("BodyVelocity")
+Velocity_Asset.Name = "BreakVelocity"
+Velocity_Asset.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+Velocity_Asset.Velocity = Vector3.new(0, 0, 0)
+
+-- Input for target
+local Input = Tab5:CreateInput({
+	Name = "Target",
+	CurrentValue = "",
+	PlaceholderText = "Enter Target's Name",
+	RemoveTextAfterFocusLost = false,
+	Flag = "Input1",
+	Callback = function(Text)
+		local trimmedText = Text:lower():gsub("^%s*(.-)%s*$", "%1")
+		local matchedPlayer = nil
+
+		for _, player in pairs(Players:GetPlayers()) do
+			if player.Name:lower():find(trimmedText) then
+				matchedPlayer = player
+				break
+			end
+		end
+
+		if matchedPlayer then
+			TargetedPlayer = matchedPlayer.Name
+			Rayfield:Notify({
+				Title = "Target Selected",
+				Content = "Selected player: " .. TargetedPlayer,
+				Image = 4483362458,
+			})
+		else
+			TargetedPlayer = nil
+			Rayfield:Notify({
+				Title = "Target Not Found",
+				Content = "No player matched: " .. Text,
+				Image = 4483362458,
+			})
+		end
+	end,
+})
+
+-- Divider
+local Divider = Tab5:CreateDivider()
+
+
+-- View button toggle
+local isViewing = false
+local currentCamera = workspace.CurrentCamera
+
+local ViewButton = Tab5:CreateButton({
+	Name = "View Target",
+	Callback = function()
+		if TargetedPlayer == nil then
+			Rayfield:Notify({
+				Title = "No Target",
+				Content = "Please select a player first.",
+				Image = 4483362458,
+			})
+			return
+		end
+
+		isViewing = not isViewing
+
+		if isViewing then
+			local targetPlayer = Players:FindFirstChild(TargetedPlayer)
+			if targetPlayer and targetPlayer.Character then
+				currentCamera.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character:FindFirstChild("Head")
+				Rayfield:Notify({
+					Title = "Viewing Target",
+					Content = "Now viewing: " .. TargetedPlayer,
+					Image = 4483362458,
+				})
+			end
+		else
+			-- Reset view back to local player
+			if LocalPlayer.Character then
+				currentCamera.CameraSubject = LocalPlayer.Character:FindFirstChild("Humanoid")
+				Rayfield:Notify({
+					Title = "View Reset",
+					Content = "Camera reset to yourself.",
+					Image = 4483362458,
+				})
+			end
+		end
+	end,
+})
+
+
+-- Headsit button
+local Button = Tab5:CreateButton({
+	Name = "Headsit",
+	Callback = function()
+		if TargetedPlayer == nil then
+			Rayfield:Notify({
+				Title = "No Target",
+				Content = "Please select a player first.",
+				Image = 4483362458,
+			})
+			return
+		end
+
+		isHeadsitting = not isHeadsitting  -- toggle the state
+
+		if isHeadsitting then
+			-- Start headsitting
+			task.spawn(function()
+				while isHeadsitting and TargetedPlayer do
+					pcall(function()
+						local root = GetRoot(LocalPlayer)
+						if root and not root:FindFirstChild("BreakVelocity") then
+							local tempV = Velocity_Asset:Clone()
+							tempV.Parent = root
+						end
+
+						local target = Players:FindFirstChild(TargetedPlayer)
+						if target and target.Character and target.Character:FindFirstChild("Head") then
+							local targetHead = target.Character.Head
+							LocalPlayer.Character.Humanoid.Sit = true
+							root.CFrame = targetHead.CFrame * CFrame.new(0, 2, 0)
+							root.Velocity = Vector3.new(0, 0, 0)
+						end
+					end)
+					task.wait()
+				end
+
+				-- Cleanup when stopped
+				local root = GetRoot(LocalPlayer)
+				if root and root:FindFirstChild("BreakVelocity") then
+					root.BreakVelocity:Destroy()
+				end
+			end)
+		end
+	end,
+})
+
+
+
+
+
+
+Tab5:CreateButton({
+	Name = "Get Target Tool",
+	Callback = function()
+		if LocalPlayer.Backpack:FindFirstChild("TargetTool") then return end
+
+		local tool = Instance.new("Tool")
+		tool.Name = "TargetTool"
+		tool.RequiresHandle = false
+		tool.CanBeDropped = false
+
+		tool.Equipped:Connect(function(mouse)
+			mouse.Button1Down:Connect(function()
+				local target = mouse.Target
+				if target and target:IsDescendantOf(workspace) then
+					local character = target:FindFirstAncestorOfClass("Model")
+					if character and Players:GetPlayerFromCharacter(character) then
+						local player = Players:GetPlayerFromCharacter(character)
+						TargetedPlayer = player.Name
+
+						Rayfield:Notify({
+							Title = "Target Selected",
+							Content = "Selected player: " .. TargetedPlayer,
+							Image = 4483362458,
+						})
+					end
+				end
+			end)
+		end)
+
+		tool.Parent = LocalPlayer.Backpack
+	end,
+})
+
+
+local isUndersitting = false 
+local currentTrack
+local lastTarget = nil
+
+local currentCamera = workspace.CurrentCamera
+local isViewing = false
+
+local function GetRoot(player)
+    if player.Character then
+        return player.Character:FindFirstChild("HumanoidRootPart") or player.Character:FindFirstChild("Humanoid").RootPart
+    end
+    return nil
+end
+
+local function equipToolWithGrip(toolName, pos, rot)
+    local backpack = LocalPlayer:WaitForChild("Backpack")
+    local character = LocalPlayer.Character
+    local tool = backpack:FindFirstChild(toolName) or character:FindFirstChild(toolName)
+
+    if not tool then
+        warn("Tool not found: "..toolName)
+        return false
+    end
+
+    tool.Parent = character
+    task.wait(0.1)
+
+    tool.GripPos = Vector3.new(pos[1], pos[2], pos[3])
+    local rotationCFrame = CFrame.Angles(rot[1], rot[2], rot[3])
+    tool.GripForward = rotationCFrame.LookVector
+    tool.GripRight = rotationCFrame.RightVector
+    tool.GripUp = rotationCFrame.UpVector
+
+    return tool
+end
+
+local function unequipTool(tool)
+    if tool and tool.Parent == LocalPlayer.Character then
+        tool.Parent = LocalPlayer.Backpack
+    end
+end
+
+local function toggleView()
+    if TargetedPlayer == nil then
+        Rayfield:Notify({
+            Title = "No Target",
+            Content = "Please select a player first.",
+            Image = 4483362458,
+        })
+        return false
+    end
+
+    isViewing = not isViewing
+
+    if isViewing then
+        local targetPlayer = Players:FindFirstChild(TargetedPlayer)
+        if targetPlayer and targetPlayer.Character then
+            currentCamera.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character:FindFirstChild("Head")
+            Rayfield:Notify({
+                Title = "Viewing Target",
+                Content = "Now viewing: " .. TargetedPlayer,
+                Image = 4483362458,
+            })
+        end
+    else
+        if LocalPlayer.Character then
+            currentCamera.CameraSubject = LocalPlayer.Character:FindFirstChild("Humanoid")
+            Rayfield:Notify({
+                Title = "View Reset",
+                Content = "Camera reset to yourself.",
+                Image = 4483362458,
+            })
+        end
+    end
+    return true
+end
+
+local UndersitButton = Tab5:CreateButton({
+    Name = "AnnoyG",
+    Callback = function()
+        if TargetedPlayer == nil then
+            Rayfield:Notify({
+                Title = "No Target",
+                Content = "Please select a player first.",
+                Image = 4483362458,
+            })
+            return
+        end
+
+        local changedTarget = (lastTarget ~= TargetedPlayer)
+        lastTarget = TargetedPlayer
+
+        isUndersitting = not isUndersitting
+
+        -- Run the view toggle here whenever UnderS toggled
+        local viewSuccess = toggleView()
+        if not viewSuccess then
+            -- If no target, abort UnderS toggling as well
+            isUndersitting = false
+            return
+        end
+
+        if isUndersitting then
+            if changedTarget then
+                -- Equip → Unequip → Equip sequence on target change
+                local tool = equipToolWithGrip("Pride Flag",
+                    {1.600000023841858, -80, 8.5},
+                    {3.141592502593994, 0.13962633907794953, 3.141592502593994}
+                )
+                task.wait(0.5)
+                unequipTool(tool)
+                task.wait(0.5)
+                equipToolWithGrip("Pride Flag",
+                    {1.600000023841858, -80, 8.5},
+                    {3.141592502593994, 0.13962633907794953, 3.141592502593994}
+                )
+            else
+                -- Equip normally if same target toggled on again
+                equipToolWithGrip("Pride Flag",
+                    {1.600000023841858, -80, 8.5},
+                    {3.141592502593994, 0.13962633907794953, 3.141592502593994}
+                )
+            end
+
+            -- Start animation and positioning loop
+            task.spawn(function()
+                while isUndersitting and TargetedPlayer do
+                    pcall(function()
+                        local root = GetRoot(LocalPlayer)
+                        local character = LocalPlayer.Character
+                        if not character or not root then return end
+                        local humanoid = character:FindFirstChildOfClass("Humanoid")
+                        if root and humanoid and not root:FindFirstChild("BreakVelocity") then
+                            local tempV = Velocity_Asset:Clone()
+                            tempV.Parent = root
+                        end
+
+                        local target = Players:FindFirstChild(TargetedPlayer)
+                        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and humanoid then
+                            local targetRoot = target.Character.HumanoidRootPart
+
+                            -- Stop existing animations
+                            for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+                                track:Stop()
+                            end
+                            -- Disable default Animate
+                            if character:FindFirstChild("Animate") then
+                                character.Animate.Disabled = true
+                            end
+
+                            -- Load and play custom animation
+                            if not currentTrack then
+                                local animation = Instance.new("Animation")
+                                animation.AnimationId = "rbxassetid://673670434"
+                                currentTrack = humanoid:LoadAnimation(animation)
+                            end
+                            if currentTrack and not currentTrack.IsPlaying then
+                                currentTrack:Play(0.1, 1, 0)
+                                currentTrack.TimePosition = 0
+                            end
+
+                            root.CFrame = targetRoot.CFrame * CFrame.new(0, -77, 0)
+                            root.Velocity = Vector3.new(0, 0, 0)
+                        end
+                    end)
+                    task.wait()
+                end
+
+                -- Cleanup when stopped
+                local root = GetRoot(LocalPlayer)
+                if root and root:FindFirstChild("BreakVelocity") then
+                    root.BreakVelocity:Destroy()
+                end
+                if currentTrack then
+                    currentTrack:Stop()
+                    currentTrack = nil
+                end
+                local character = LocalPlayer.Character
+                if character and character:FindFirstChild("Animate") then
+                    character.Animate.Disabled = false
+                end
+            end)
+        else
+            -- Stop animation and cleanup when toggled off
+            if currentTrack then
+                currentTrack:Stop()
+                currentTrack = nil
+            end
+            local character = LocalPlayer.Character
+            if character and character:FindFirstChild("Animate") then
+                character.Animate.Disabled = false
+            end
+            -- Reset view when toggled off
+            if isViewing then
+                isViewing = false
+                if character then
+                    local humanoid = character:FindFirstChildOfClass("Humanoid")
+                    if humanoid then
+                        currentCamera.CameraSubject = humanoid
+                        Rayfield:Notify({
+                            Title = "View Reset",
+                            Content = "Camera reset to yourself.",
+                            Image = 4483362458,
+                        })
+                    end
+                end
+            end
+        end
+    end,
+})
+
+-- **ADDED**: Reapply view on respawn to fix camera reset issue
+LocalPlayer.CharacterAdded:Connect(function(character)
+    task.wait(1)  -- wait a moment for the character to load
+
+    if isViewing and TargetedPlayer then
+        local targetPlayer = Players:FindFirstChild(TargetedPlayer)
+        if targetPlayer and targetPlayer.Character then
+            currentCamera.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character:FindFirstChild("Head")
+            Rayfield:Notify({
+                Title = "Viewing Target",
+                Content = "Now viewing: " .. TargetedPlayer,
+                Image = 4483362458,
+            })
+        end
+    else
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                currentCamera.CameraSubject = humanoid
+                Rayfield:Notify({
+                    Title = "View Reset",
+                    Content = "Camera reset to yourself.",
+                    Image = 4483362458,
+                })
+            end
+        end
+    end
+end)
+
+----------------------------------------------------------------------------------------------------------------
+
+
+
+local isSignTrolling = false
+local currentTrack
+local lastTarget = nil
+
+local currentCamera = workspace.CurrentCamera
+local isViewing = false
+
+local function GetRoot(player)
+    if player.Character then
+        return player.Character:FindFirstChild("HumanoidRootPart") or player.Character:FindFirstChild("Humanoid").RootPart
+    end
+    return nil
+end
+
+local function equipToolWithGrip(toolName, pos, rot)
+    local backpack = LocalPlayer:WaitForChild("Backpack")
+    local character = LocalPlayer.Character
+    local tool = backpack:FindFirstChild(toolName) or character:FindFirstChild(toolName)
+
+    if not tool then
+        warn("Tool not found: "..toolName)
+        return false
+    end
+
+    tool.Parent = character
+    task.wait(0.1)
+
+    tool.GripPos = pos
+    local rotationCFrame = CFrame.Angles(rot.X, rot.Y, rot.Z)
+    tool.GripForward = rotationCFrame.LookVector
+    tool.GripRight = rotationCFrame.RightVector
+    tool.GripUp = rotationCFrame.UpVector
+
+    return tool
+end
+
+local function unequipTool(tool)
+    if tool and tool.Parent == LocalPlayer.Character then
+        tool.Parent = LocalPlayer.Backpack
+    end
+end
+
+local function toggleView()
+    if TargetedPlayer == nil then
+        Rayfield:Notify({
+            Title = "No Target",
+            Content = "Please select a player first.",
+            Image = 4483362458,
+        })
+        return false
+    end
+
+    isViewing = true
+
+    local targetPlayer = Players:FindFirstChild(TargetedPlayer)
+    if targetPlayer and targetPlayer.Character then
+        currentCamera.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character:FindFirstChild("Head")
+        Rayfield:Notify({
+            Title = "Viewing Target",
+            Content = "Now viewing: " .. TargetedPlayer,
+            Image = 4483362458,
+        })
+    end
+
+    return true
+end
+
+-- Grip info
+local signGrip = {
+    pos = Vector3.new(0.273, -80.5, -1.283),
+    rot = Vector3.new(-0.088, -0.088, 0.038)
+}
+
+-- SignTroll button
+local SignTrollButton = Tab5:CreateButton({
+    Name = "SignTroll",
+    Callback = function()
+        if TargetedPlayer == nil then
+            Rayfield:Notify({
+                Title = "No Target",
+                Content = "Please select a player first.",
+                Image = 4483362458,
+            })
+            return
+        end
+
+        local changedTarget = (lastTarget ~= TargetedPlayer)
+        lastTarget = TargetedPlayer
+
+        isSignTrolling = not isSignTrolling
+
+        -- Toggle camera
+        local viewSuccess = toggleView()
+        if not viewSuccess then
+            isSignTrolling = false
+            return
+        end
+
+        if isSignTrolling then
+            if changedTarget then
+                local tool = equipToolWithGrip("Sign", signGrip.pos, signGrip.rot)
+                task.wait(0.5)
+                unequipTool(tool)
+                task.wait(0.5)
+                equipToolWithGrip("Sign", signGrip.pos, signGrip.rot)
+            else
+                equipToolWithGrip("Sign", signGrip.pos, signGrip.rot)
+            end
+
+            task.spawn(function()
+                while isSignTrolling and TargetedPlayer do
+                    pcall(function()
+                        local root = GetRoot(LocalPlayer)
+                        local character = LocalPlayer.Character
+                        if not character or not root then return end
+                        local humanoid = character:FindFirstChildOfClass("Humanoid")
+                        if root and humanoid and not root:FindFirstChild("BreakVelocity") then
+                            local tempV = Velocity_Asset:Clone()
+                            tempV.Parent = root
+                        end
+
+                        local target = Players:FindFirstChild(TargetedPlayer)
+                        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and humanoid then
+                            local targetRoot = target.Character.HumanoidRootPart
+
+                            for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+                                track:Stop()
+                            end
+
+                            if character:FindFirstChild("Animate") then
+                                character.Animate.Disabled = true
+                            end
+
+                            if not currentTrack then
+                                local animation = Instance.new("Animation")
+                                animation.AnimationId = "rbxassetid://673670434"
+                                currentTrack = humanoid:LoadAnimation(animation)
+                            end
+                            if currentTrack and not currentTrack.IsPlaying then
+                                currentTrack:Play(0.1, 1, 0)
+                                currentTrack.TimePosition = 0
+                            end
+
+                            root.CFrame = targetRoot.CFrame * CFrame.new(0, -77, 0)
+                            root.Velocity = Vector3.new(0, 0, 0)
+                        end
+                    end)
+                    task.wait()
+                end
+
+                local root = GetRoot(LocalPlayer)
+                if root and root:FindFirstChild("BreakVelocity") then
+                    root.BreakVelocity:Destroy()
+                end
+                if currentTrack then
+                    currentTrack:Stop()
+                    currentTrack = nil
+                end
+                local character = LocalPlayer.Character
+                if character and character:FindFirstChild("Animate") then
+                    character.Animate.Disabled = false
+                end
+            end)
+        else
+            if currentTrack then
+                currentTrack:Stop()
+                currentTrack = nil
+            end
+            local character = LocalPlayer.Character
+            if character and character:FindFirstChild("Animate") then
+                character.Animate.Disabled = false
+            end
+            if isViewing then
+                isViewing = false
+                if character then
+                    local humanoid = character:FindFirstChildOfClass("Humanoid")
+                    if humanoid then
+                        currentCamera.CameraSubject = humanoid
+                        Rayfield:Notify({
+                            Title = "View Reset",
+                            Content = "Camera reset to yourself.",
+                            Image = 4483362458,
+                        })
+                    end
+                end
+            end
+        end
+    end,
+})
+
+-- View stays active if player resets
+LocalPlayer.CharacterAdded:Connect(function(character)
+    task.wait(1)
+    if isViewing and TargetedPlayer then
+        local targetPlayer = Players:FindFirstChild(TargetedPlayer)
+        if targetPlayer and targetPlayer.Character then
+            currentCamera.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character:FindFirstChild("Head")
+            Rayfield:Notify({
+                Title = "Viewing Target",
+                Content = "Now viewing: " .. TargetedPlayer,
+                Image = 4483362458,
+            })
+        end
+    end
+end)
+
+
+local isSignTrolling = false
+local currentSignTrack
+local lastSignTarget = nil
+
+local gripConfigs = {
+    { name = "Pride Flag", pos = Vector3.new(-0.5, -80.1, 8.5), rot = Vector3.new(-3.142, 0.139, -3.142) },
+    { name = "Sign", pos = Vector3.new(0.273, -80.5, -1.283), rot = Vector3.new(-0.088, -0.088, 0.038) },
+}
+
+local function GetRoot(player)
+    if player.Character then
+        return player.Character:FindFirstChild("HumanoidRootPart") or player.Character:FindFirstChild("Humanoid").RootPart
+    end
+    return nil
+end
+
+local function equipToolWithGrip(toolConfig)
+    local backpack = LocalPlayer:WaitForChild("Backpack")
+    local character = LocalPlayer.Character
+    local tool = backpack:FindFirstChild(toolConfig.name) or character:FindFirstChild(toolConfig.name)
+
+    if tool then
+        tool.Parent = character
+        task.wait(0.1)
+        tool.GripPos = toolConfig.pos
+        local cf = CFrame.Angles(toolConfig.rot.X, toolConfig.rot.Y, toolConfig.rot.Z)
+        tool.GripForward = cf.LookVector
+        tool.GripRight = cf.RightVector
+        tool.GripUp = cf.UpVector
+    end
+
+    return tool
+end
+
+local function unequipTool(toolName)
+    local character = LocalPlayer.Character
+    if character then
+        local tool = character:FindFirstChild(toolName)
+        if tool then
+            tool.Parent = LocalPlayer:WaitForChild("Backpack")
+        end
+    end
+end
+
+local function equipAllToolsSequence()
+    for _, config in ipairs(gripConfigs) do
+        local tool = equipToolWithGrip(config)
+        task.wait(0.1)
+        unequipTool(config.name)
+        task.wait(0.1)
+        equipToolWithGrip(config)
+    end
+end
+
+Tab5:CreateButton({
+    Name = "FlagWSignTroll",
+    Callback = function()
+        if TargetedPlayer == nil then
+            Rayfield:Notify({
+                Title = "No Target",
+                Content = "Please select a player first.",
+                Image = 4483362458,
+            })
+            return
+        end
+
+        local changedTarget = (lastSignTarget ~= TargetedPlayer)
+        lastSignTarget = TargetedPlayer
+
+        isSignTrolling = not isSignTrolling
+
+        if isSignTrolling then
+            if changedTarget then
+                equipAllToolsSequence()
+            else
+                for _, config in ipairs(gripConfigs) do
+                    equipToolWithGrip(config)
+                end
+            end
+
+            task.spawn(function()
+                while isSignTrolling and TargetedPlayer do
+                    pcall(function()
+                        local root = GetRoot(LocalPlayer)
+                        local character = LocalPlayer.Character
+                        if not character or not root then return end
+                        local humanoid = character:FindFirstChildOfClass("Humanoid")
+                        if root and humanoid and not root:FindFirstChild("BreakVelocity") then
+                            local tempV = Velocity_Asset:Clone()
+                            tempV.Parent = root
+                        end
+
+                        local target = Players:FindFirstChild(TargetedPlayer)
+                        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and humanoid then
+                            local targetRoot = target.Character.HumanoidRootPart
+
+                            -- Stop existing animations
+                            for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+                                track:Stop()
+                            end
+                            if character:FindFirstChild("Animate") then
+                                character.Animate.Disabled = true
+                            end
+
+                            -- Play custom animation
+                            if not currentSignTrack then
+                                local anim = Instance.new("Animation")
+                                anim.AnimationId = "rbxassetid://673670434"
+                                currentSignTrack = humanoid:LoadAnimation(anim)
+                            end
+                            if currentSignTrack and not currentSignTrack.IsPlaying then
+                                currentSignTrack:Play(0.1, 1, 0)
+                                currentSignTrack.TimePosition = 0
+                            end
+
+                            root.CFrame = targetRoot.CFrame * CFrame.new(0, -77, 0)
+                            root.Velocity = Vector3.new(0, 0, 0)
+                        end
+                    end)
+                    task.wait()
+                end
+
+                local root = GetRoot(LocalPlayer)
+                if root and root:FindFirstChild("BreakVelocity") then
+                    root.BreakVelocity:Destroy()
+                end
+                if currentSignTrack then
+                    currentSignTrack:Stop()
+                    currentSignTrack = nil
+                end
+                local character = LocalPlayer.Character
+                if character and character:FindFirstChild("Animate") then
+                    character.Animate.Disabled = false
+                end
+            end)
+        else
+            if currentSignTrack then
+                currentSignTrack:Stop()
+                currentSignTrack = nil
+            end
+            local character = LocalPlayer.Character
+            if character and character:FindFirstChild("Animate") then
+                character.Animate.Disabled = false
+            end
+        end
+    end,
+})
+
+
+
+
+
+
+
+
+
+local Tab3 = Window:CreateTab("Loaders", "loader")
+local Section = Tab3:CreateSection("Z Old Ver/Modded Sys")
+
+local Button = Tab3:CreateButton({
+   Name = "Old version",
+   Callback = function()
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/zhsiun/zsawq/refs/heads/main/zcsaa"))()
+   end,
+})
+
+
+Rayfield:LoadConfiguration()
