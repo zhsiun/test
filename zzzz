@@ -79,9 +79,6 @@ local Section = Tab:CreateSection("Section Example")
 Section:Set("Keystone")
 
 
-local Divider = Tab:CreateDivider()
-
-
 local colorCycleRunning = false
 local colorCycleThread
 
@@ -3093,4 +3090,8 @@ local Button = Tab3:CreateButton({
 })
 
 
+
+
 Rayfield:LoadConfiguration()
+
+
